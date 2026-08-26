@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istikshaf - Operator / Analyst Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&amp;family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8c947c",
+                        "on-secondary-fixed-variant": "#004f55",
+                        "inverse-surface": "#e1e4d2",
+                        "inverse-primary": "#476800",
+                        "secondary-container": "#00c0cf",
+                        "on-primary-container": "#4c6e00",
+                        "surface-tint": "#9cd924",
+                        "on-secondary-fixed": "#001f23",
+                        "on-tertiary-container": "#835d00",
+                        "on-surface-variant": "#c2cab0",
+                        "tertiary": "#fffeff",
+                        "on-error": "#690005",
+                        "outline-variant": "#434935",
+                        "on-primary": "#233600",
+                        "surface-container-high": "#272b1f",
+                        "surface-container-highest": "#32362a",
+                        "primary-container": "#b6f542",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "error-container": "#93000a",
+                        "secondary": "#45dceb",
+                        "inverse-on-surface": "#2e3225",
+                        "on-secondary": "#00363b",
+                        "surface-container-lowest": "#0c0f06",
+                        "primary": "#fffff3",
+                        "on-tertiary": "#422d00",
+                        "on-tertiary-fixed": "#271900",
+                        "tertiary-container": "#ffdda5",
+                        "surface-container": "#1d2115",
+                        "background": "#11150a",
+                        "on-primary-fixed": "#131f00",
+                        "surface-variant": "#32362a",
+                        "surface-container-low": "#191d12",
+                        "secondary-fixed-dim": "#40d9e8",
+                        "surface-dim": "#11150a",
+                        "surface": "#11150a",
+                        "on-surface": "#e1e4d2",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdea8",
+                        "primary-fixed-dim": "#9cd924",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#354e00",
+                        "on-secondary-container": "#00494f",
+                        "primary-fixed": "#b7f643",
+                        "on-background": "#e1e4d2",
+                        "tertiary-fixed-dim": "#f9bc45",
+                        "surface-bright": "#373b2e",
+                        "secondary-fixed": "#88f3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-xl": "40px",
+                        "margin": "24px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "grid_columns": "12",
+                        "stack-sm": "8px",
+                        "stack-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Archivo Narrow"],
+                        "label-caps": ["Public Sans"],
+                        "body-sm": ["Public Sans"],
+                        "data-md": ["IBM Plex Mono"],
+                        "headline-md": ["Archivo Narrow"],
+                        "headline-sm": ["Archivo Narrow"],
+                        "body-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-lg": ["Archivo Narrow"],
+                        "data-lg": ["IBM Plex Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "data-md": ["14px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "data-lg": ["18px", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #070A09; }
+        .level-1 { background-color: #0C110E; }
+        .level-2 { background-color: #101512; border: 1px solid #263129; }
+        .level-3 { background-color: #161D19; box-shadow: 0 16px 32px -8px rgba(0,0,0,0.4); }
+        .chart-bar-bg { background-color: #1d2115; }
+        .chart-bar-fill { background-color: #b6f542; }
+        
+        /* Thin scrollbar for webkit */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #263129; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #434935; }
+    </style>
+</head>
+<body class="text-on-surface font-body-md h-screen w-screen overflow-hidden flex bg-background">
+<!-- Shared Component: SideNavBar -->
+<nav class="hidden md:flex bg-surface-container-low border-r border-outline-variant fixed left-0 top-0 h-full w-[240px] flex-col py-margin z-40 level-1">
+<div class="px-margin mb-8 flex items-center gap-3">
+<img class="w-8 h-8 object-contain" data-alt="A highly detailed, technical logo for an industrial AI application. The logo features sharp, geometric shapes in electric lime green against a deep charcoal background, resembling a stylized power grid node or circuitry. The design is sleek, precise, and futuristic, embodying high-end corporate modernism and technical noir aesthetics, suitable for a dark-mode utility monitoring dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADWNanIdRfjsABBf5mOjHjKXcjZ9aa17KYCGKljftneMV3RxDil7FNELprIIDPywrgtSoVf2jH1jOUIScVv7a2NnZvMDVp4o5CQHsH2UGkV1ltOjSnC_n0v-QI6hs16iMFWoHmRmx66TAKH3d1jyyt3t_a3uMx5AzPbsoKr-JmnE3YkYCIEJhJNNkWVyRP4qoGTiKm_JZ8KAkWUPUVb2SuPkXOhoZxYmBJ_klLyXUu75UwzgZHitp4"/>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary" style="font-size: 24px; line-height: 1;">Istikshaf</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-wider mt-1">Utility Ops AI</p>
+</div>
+</div>
+<div class="px-margin mb-6">
+<button class="w-full bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                New Inspection
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-bold border-r-4 border-primary bg-surface-container-high transition-colors hover:bg-surface-container-high rounded-l" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md text-body-md">Grid Topology</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">biotech</span>
+<span class="font-body-md text-body-md">Anomaly Detection</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-body-md text-body-md">Inspection Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">System Config</span>
+</a>
+</div>
+<div class="mt-auto px-4 space-y-1 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors rounded" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- Shared Component: TopNavBar -->
+<header class="hidden md:flex justify-between items-center h-16 px-margin fixed top-0 right-0 w-[calc(100%-240px)] z-50 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-6 h-full">
+<h2 class="font-headline-md text-headline-md font-semibold text-primary pr-6 border-r border-outline-variant">Istikshaf Grid Monitor</h2>
+<nav class="flex h-full items-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-all font-body-md text-body-md" href="#">Live View</a>
+<a class="text-primary border-b-2 border-primary pb-1 h-full flex items-center opacity-80 font-body-md text-body-md" href="#">Historical</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-body-md text-body-md" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-surface-container border border-outline-variant rounded px-3 py-1 focus-within:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant mr-2 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md p-0 w-48 text-on-surface placeholder-on-surface-variant" placeholder="Search..." type="text"/>
+</div>
+<button class="bg-surface-variant text-on-surface px-4 py-1.5 rounded font-data-md text-data-md border border-outline-variant hover:bg-surface-container-high transition-colors">Export Data</button>
+<button class="bg-primary-container text-on-primary-container px-4 py-1.5 rounded font-data-md text-data-md font-semibold hover:bg-surface-tint transition-colors">Run Analysis</button>
+<div class="flex items-center gap-2 ml-4 pl-4 border-l border-outline-variant">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:ml-[240px] pt-16 w-full h-full overflow-y-auto p-margin">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Grid Intelligence Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">System-wide operational metrics and anomaly detection.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded font-data-md text-data-md font-semibold flex items-center gap-2 hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                Run New Analysis
+            </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Key Metrics Row (Full Width) -->
+<div class="col-span-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter mb-2">
+<div class="level-2 p-4 rounded flex flex-col relative">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Injected Energy</span>
+<span class="font-data-lg text-data-lg text-primary">1.2 <span class="text-sm text-on-surface-variant">GWh</span></span>
+<div class="absolute top-4 right-4 text-outline-variant font-data-md text-xs">MET-01</div>
+</div>
+<div class="level-2 p-4 rounded flex flex-col relative">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Billed Energy</span>
+<span class="font-data-lg text-data-lg text-secondary-fixed">0.95 <span class="text-sm text-on-surface-variant">GWh</span></span>
+<div class="absolute top-4 right-4 text-outline-variant font-data-md text-xs">MET-02</div>
+</div>
+<div class="level-2 p-4 rounded flex flex-col relative">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Est. Tech Loss</span>
+<span class="font-data-lg text-data-lg text-tertiary-fixed-dim">5%</span>
+<div class="absolute top-4 right-4 text-outline-variant font-data-md text-xs">MET-03</div>
+</div>
+<div class="level-2 p-4 rounded flex flex-col relative border-l-4 border-l-error">
+<span class="font-label-caps text-label-caps text-error uppercase tracking-wider mb-2">Unaccounted Residual</span>
+<span class="font-data-lg text-data-lg text-error">16%</span>
+<div class="absolute top-4 right-4 text-outline-variant font-data-md text-xs">MET-04</div>
+</div>
+<div class="level-2 p-4 rounded flex flex-col relative bg-error/10 border-error/20 border">
+<span class="font-label-caps text-label-caps text-error uppercase tracking-wider mb-2">High-Priority PMTs</span>
+<span class="font-data-lg text-data-lg text-error">12</span>
+<div class="absolute top-4 right-4 text-error/50 font-data-md text-xs">ALERT</div>
+</div>
+<div class="level-2 p-4 rounded flex flex-col relative">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Conn. Review</span>
+<span class="font-data-lg text-data-lg text-primary">48</span>
+<div class="absolute top-4 right-4 text-outline-variant font-data-md text-xs">MET-06</div>
+</div>
+</div>
+<!-- Main Visualizations -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Grid Balance Flow (Simulated Sankey/Flow) -->
+<div class="level-2 p-margin rounded h-64 relative overflow-hidden flex flex-col">
+<div class="flex justify-between items-center mb-4 z-10">
+<h3 class="font-headline-sm text-headline-sm text-primary">Grid Balance Visualization</h3>
+<span class="font-data-md text-data-md text-outline-variant text-xs">VIS-FLW-A</span>
+</div>
+<div class="flex-1 flex items-center justify-between z-10 font-data-md text-sm px-8">
+<div class="flex flex-col items-center">
+<div class="w-32 h-16 bg-surface-container border border-outline-variant rounded flex items-center justify-center text-primary-container">
+                                Injected: 100%
+                            </div>
+</div>
+<div class="flex flex-col space-y-8 flex-1 px-8 relative">
+<!-- SVG lines for connection -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none">
+<path class="opacity-50" d="M 0,40 C 50,40 50,10 100,10" fill="none" stroke="#00c0cf" stroke-width="2"></path>
+<path class="opacity-50" d="M 0,40 C 50,40 50,40 100,40" fill="none" stroke="#f9bc45" stroke-width="2"></path>
+<path class="opacity-50" d="M 0,40 C 50,40 50,70 100,70" fill="none" stroke="#ffb4ab" stroke-dasharray="4" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-32 h-10 bg-surface-container border border-secondary-container rounded flex items-center justify-center text-secondary-fixed text-xs">
+                                Billed: 79%
+                            </div>
+<div class="w-32 h-10 bg-surface-container border border-tertiary-fixed-dim rounded flex items-center justify-center text-tertiary-fixed-dim text-xs">
+                                Tech Loss: 5%
+                            </div>
+<div class="w-32 h-10 bg-error/10 border border-error rounded flex items-center justify-center text-error text-xs font-bold">
+                                Residual: 16%
+                            </div>
+</div>
+</div>
+</div>
+<!-- Horizontal Bar Chart -->
+<div class="level-2 p-margin rounded">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary">Feeder Residual Ranking</h3>
+<span class="font-data-md text-data-md text-outline-variant text-xs">VIS-BAR-B</span>
+</div>
+<div class="space-y-4">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between font-data-md text-sm mb-1">
+<span class="text-on-surface">FDR-08</span>
+<span class="text-error font-bold">24%</span>
+</div>
+<div class="w-full h-2 chart-bar-bg rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between font-data-md text-sm mb-1">
+<span class="text-on-surface">FDR-17</span>
+<span class="text-tertiary-fixed-dim">19%</span>
+</div>
+<div class="w-full h-2 chart-bar-bg rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between font-data-md text-sm mb-1">
+<span class="text-on-surface">FDR-23</span>
+<span class="text-primary-container">15%</span>
+</div>
+<div class="w-full h-2 chart-bar-bg rounded-full overflow-hidden">
+<div class="h-full chart-bar-fill rounded-full" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div>
+<div class="flex justify-between font-data-md text-sm mb-1">
+<span class="text-on-surface">FDR-04</span>
+<span class="text-primary-container">8%</span>
+</div>
+<div class="w-full h-2 chart-bar-bg rounded-full overflow-hidden">
+<div class="h-full chart-bar-fill rounded-full opacity-60" style="width: 25%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar / Right Column -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Hotspot Network Map -->
+<div class="level-2 p-margin rounded h-64 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-center mb-4 z-10 relative">
+<h3 class="font-headline-sm text-headline-sm text-primary">PMT Hotspot Network</h3>
+<span class="font-data-md text-data-md text-outline-variant text-xs">VIS-NET-C</span>
+</div>
+<!-- Using div background for visual as requested -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center opacity-40 mix-blend-screen group-hover:opacity-60 transition-opacity duration-500" data-alt="A dark, abstract digital map visualization of a power grid network. It features glowing nodes interconnected by thin, precise geometric lines. High-priority nodes pulse in a subdued coral red, while normal operations glow in faint electric lime green. The aesthetic is heavily technical noir, resembling a high-tech radar or cybernetic overlay in a dark corporate control room." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPO9oRWCNoDE7Ncc3YSyulN3MnwuWULTqFF7Rc1tm8AAbvpySfz9Xn5DKJd0vmIybBimIcazdRcnd4ZC_kkdJ0BXIabEDFP9ioVrQnig608fRUZE1f3zBdirMOWOzVsFU7CPPX7KdTqcVhtV5aQjGYJgwAI_AAn3HJ1qekRAYI0zXl2dduJAOmQQfAV95fp2tc2H_tutrZ5hAP83Z0fPWSPqOsM8-KLDyJor88YfzGaBTJv5n1N2x8')"></div>
+<div class="absolute bottom-4 right-4 z-10">
+<button class="bg-surface-container/80 backdrop-blur border border-outline-variant text-on-surface px-3 py-1 rounded text-xs font-data-md hover:border-primary-container transition-colors">Expand Map</button>
+</div>
+</div>
+<!-- Recent Priority Recommendations -->
+<div class="level-2 rounded flex flex-col overflow-hidden">
+<div class="p-margin pb-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Priority Recommendations</h3>
+<span class="font-data-md text-data-md text-outline-variant text-xs">LST-01</span>
+</div>
+<div class="divide-y divide-outline-variant/50 max-h-[300px] overflow-y-auto">
+<!-- List Item 1 -->
+<div class="p-4 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-md text-data-md text-error">INV-8832</span>
+<span class="font-label-caps text-label-caps text-error bg-error/10 px-2 py-0.5 rounded">CRITICAL</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2">Anomalous load detected on Feeder 08, PMT-44. Immediate physical inspection recommended.</p>
+<div class="flex items-center text-xs text-on-surface-variant font-data-md">
+<span class="material-symbols-outlined text-[14px] mr-1">schedule</span> 12 mins ago
+                            </div>
+</div>
+<!-- List Item 2 -->
+<div class="p-4 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-md text-data-md text-tertiary-fixed-dim">INV-8831</span>
+<span class="font-label-caps text-label-caps text-tertiary-fixed-dim bg-tertiary-fixed-dim/10 px-2 py-0.5 rounded">WARNING</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2">Slight residual variance trend identified on FDR-17 across 3 successive billing cycles.</p>
+<div class="flex items-center text-xs text-on-surface-variant font-data-md">
+<span class="material-symbols-outlined text-[14px] mr-1">schedule</span> 45 mins ago
+                            </div>
+</div>
+<!-- List Item 3 -->
+<div class="p-4 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-md text-data-md text-primary-container">INV-8829</span>
+<span class="font-label-caps text-label-caps text-primary-container bg-primary-container/10 px-2 py-0.5 rounded">REVIEW</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2">Pipeline comparison complete for Substation Alpha. 48 connections flagged for parameter review.</p>
+<div class="flex items-center text-xs text-on-surface-variant font-data-md">
+<span class="material-symbols-outlined text-[14px] mr-1">schedule</span> 2 hrs ago
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
