@@ -115,36 +115,57 @@ def main():
     eval_df['pred_m1'] = preds_m1
     eval_df['pred_m2'] = preds_m2
     
-    print("\n" + "="*70)
-    print("UPLIFT PROOF: IMPACT OF SMART METERS ON DETECTION")
-    print("="*70)
+    print("\n" + "="*75)
+    print("UPLIFT PROOF: IMPACT OF SMART METERS ON DETECTION (AMI POPULATION)")
+    print("="*75)
     
-    archetypes_to_check = ['peak_hour_shaver', 'nighttime_ac', 'fixed_shunt']
+    # Per-archetype breakdown
+    print(f"\n{'Archetype':<20} | {'Monthly Recall':<15} | {'AMI Recall':<15} | {'Recall Uplift':<15}")
+    print("-" * 75)
     
-    for arch in archetypes_to_check:
+    archetypes = sorted(eval_df[eval_df['is_theft_ground_truth']]['theft_type'].unique())
+    
+    for arch in archetypes:
         mask = (eval_df['theft_type'] == arch)
         if not mask.any():
             continue
             
-        y_true = np.ones(mask.sum()) # all in this mask are true theft
-        
+        y_true = np.ones(mask.sum())
         y_pred_1 = eval_df.loc[mask, 'pred_m1']
-        rec_1 = recall_score(y_true, y_pred_1)
-        
         y_pred_2 = eval_df.loc[mask, 'pred_m2']
+        
+        rec_1 = recall_score(y_true, y_pred_1)
         rec_2 = recall_score(y_true, y_pred_2)
+        diff = (rec_2 - rec_1) * 100
         
-        print(f"\nArchetype: {arch.upper()}")
-        print(f"  Monthly-Only Recall: {rec_1*100:5.1f}%")
-        print(f"  AMI-Enabled Recall:  {rec_2*100:5.1f}%")
-        print(f"  UPLIFT:              +{(rec_2 - rec_1)*100:.1f} pts")
+        sign = "+" if diff >= 0 else ""
+        print(f"{arch:<20} | {rec_1*100:13.1f}% | {rec_2*100:13.1f}% | {sign}{diff:13.1f}%")
         
-    print("\nOVERALL FALSE POSITIVE RATE (Honest Consumers)")
+    print("-" * 75)
+    
+    # Overall Metrics across all AMI consumers
+    y_true_all = eval_df['is_theft_ground_truth'].astype(int)
+    
+    prec_1 = precision_score(y_true_all, eval_df['pred_m1'])
+    rec_all_1 = recall_score(y_true_all, eval_df['pred_m1'])
+    f1_1 = 2 * (prec_1 * rec_all_1) / (prec_1 + rec_all_1) if (prec_1 + rec_all_1) > 0 else 0
+    
+    prec_2 = precision_score(y_true_all, eval_df['pred_m2'])
+    rec_all_2 = recall_score(y_true_all, eval_df['pred_m2'])
+    f1_2 = 2 * (prec_2 * rec_all_2) / (prec_2 + rec_all_2) if (prec_2 + rec_all_2) > 0 else 0
+    
+    print("\nOVERALL EVAL METRICS (ALL CONSUMER-MONTHS):")
+    print(f"  Precision:         {prec_1*100:5.1f}%  -->  {prec_2*100:5.1f}%  (+{(prec_2-prec_1)*100:.1f} pts)")
+    print(f"  Recall:            {rec_all_1*100:5.1f}%  -->  {rec_all_2*100:5.1f}%  (+{(rec_all_2-rec_all_1)*100:.1f} pts)")
+    print(f"  F1 Score:          {f1_1:5.3f}   -->  {f1_2:5.3f}   (+{f1_2-f1_1:.3f})")
+    
+    print("\nFALSE POSITIVE RATE (Honest Consumers):")
     honest_mask = (eval_df['is_theft_ground_truth'] == False)
     fpr_1 = eval_df.loc[honest_mask, 'pred_m1'].mean()
     fpr_2 = eval_df.loc[honest_mask, 'pred_m2'].mean()
-    print(f"  Monthly-Only FPR: {fpr_1*100:5.2f}%")
-    print(f"  AMI-Enabled FPR:  {fpr_2*100:5.2f}%")
+    print(f"  Monthly-Only FPR:  {fpr_1*100:5.2f}%")
+    print(f"  AMI-Enabled FPR:   {fpr_2*100:5.2f}%")
+    print("="*75)
 
 if __name__ == '__main__':
     main()
