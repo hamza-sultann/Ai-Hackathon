@@ -16,6 +16,44 @@ def check_confound(consumer_id, prosumer_status, uptime_pct, calibrated_probabil
         return True
     return False
 
+def recidivism_checker(consumer_id):
+    """
+    Checks if the consumer has been flagged before.
+    Returns True if a repeat offender.
+    """
+    # TODO: Implement logic to query past investigation log
+    print(f"[TODO: Recidivism Checker] Checking history for {consumer_id}")
+    return False # Placeholder - assume not a repeat for now
+
+def case_dedup_guard(consumer_id):
+    """
+    Checks if the consumer is already under investigation.
+    Returns True if already being investigated.
+    """
+    # TODO: Implement logic to check investigation status DB
+    print(f"[TODO: Case Dedup Guard] Checking status for {consumer_id}")
+    return False # Placeholder - assume not under investigation
+
+def seasonal_agent(current_month, base_threshold):
+    """
+    Adjusts the base probability threshold based on the month.
+    Returns the adjusted threshold.
+    """
+    # TODO: Implement seasonal adjustment logic
+    print(f"[TODO: Seasonal Agent] Adjusting threshold for month {current_month}")
+    # Example: Maybe summer is harder to detect, so lower threshold slightly?
+    # adj = {'06', '07', '08'}.get(current_month, 0.0) # Dummy logic
+    return base_threshold # Placeholder - return original threshold
+
+def urdu_localization_agent(text_in_english):
+    """
+    Translates the English text into Urdu/Roman Urdu.
+    Returns the translated text.
+    """
+    # TODO: Integrate with a translation API or model
+    print(f"[TODO: Urdu Localization Agent] Translating: {text_in_english}")
+    return f"[URDU_SIMULATION] {text_in_english}" # Placeholder translation
+
 def send_soft_warning(consumer_id, shap_values, raw_features, calibrated_probability):
     """
     Sends a soft warning SMS if probability is in the specified range. Logs and returns True if sent.
@@ -28,7 +66,10 @@ def send_soft_warning(consumer_id, shap_values, raw_features, calibrated_probabi
 
             # Mask PII for the message
             masked_warning_sms = mask_pii(warning_sms, consumer_id)
-            print(f"SOFT WARNING SMS SENT: {masked_warning_sms}")
+            
+            # --- INTEGRATE URDU LOCALIZATION ---
+            localized_warning_sms = urdu_localization_agent(masked_warning_sms)
+            print(f"SOFT WARNING SMS SENT: {localized_warning_sms}")
 
             # Log the soft warning action
             log_audit(consumer_id, calibrated_probability, shap_values, "Sent Soft Warning SMS")
@@ -60,9 +101,12 @@ def route_to_dual_channel(consumer_id, shap_values, raw_features, feeder_status,
 
     # Mask PII for the alert
     masked_field_alert = mask_pii(field_alert, consumer_id)
+    
+    # --- INTEGRATE URDU LOCALIZATION ---
+    localized_field_alert = urdu_localization_agent(masked_field_alert)
 
     print("\n--- FIELD ALERT ---")
-    print(masked_field_alert)
+    print(localized_field_alert)
 
 def mask_pii(text, consumer_id):
     """
@@ -156,31 +200,49 @@ def dispatch_agent(input_data_path, consumer_data_path, calibrated_probability=N
     with open(input_data_path, 'r') as f:
         input_data = json.load(f)
 
-    # Example structure of input_data:
-    # {"consumer_id": "C-000001", "shap_values": {"pmt_loss_delta_pct": 0.15, ...}, "raw_features": {...}}
-    
     consumer_id = input_data["consumer_id"]
+    shap_values = input_data["shap_values"]
+    raw_features = input_data["raw_features"]
     
     # Query feeder and prosumer status from master data
     consumer_row = consumer_df[consumer_df["consumer_id"] == consumer_id].iloc[0]
-    feeder_status = consumer_row["feeder_id"] # Or a derived status column if available
+    feeder_status = consumer_row["feeder_id"]
     prosumer_status = consumer_row["is_registered_prosumer"]
 
-    # --- AGENT LOGIC BEGINS - Orchestrated by calling helper functions ---
+    # --- NEW AGENT LOGIC INTEGRATION ---
+    # Case Deduplication Check (early exit if already under investigation)
+    if case_dedup_guard(consumer_id):
+        print(f"Consumer {consumer_id} is already under investigation. Skipping dispatch.")
+        log_audit(consumer_id, calibrated_probability, shap_values, "Skipped - Already Under Investigation")
+        return # Exit early
+
+    # Recidivism Check (could elevate priority or probability)
+    is_recidivist = recidivism_checker(consumer_id)
+    if is_recidivist:
+        print(f"Consumer {consumer_id} is a recidivist. Elevating priority.")
+        # Example: Slightly increase the effective probability or set a high-priority flag
+        effective_probability = min(calibrated_probability + 0.05, 1.0) # Boost slightly
+    else:
+        effective_probability = calibrated_probability
+
+    # --- ORIGINAL AGENT LOGIC BEGINS - Orchestrated by calling helper functions ---
     
-    # 1. Confound Checker
-    if check_confound(consumer_id, prosumer_status, feeder_uptime_pct, calibrated_probability):
+    # 1. Confound Checker (uses original or boosted probability)
+    if check_confound(consumer_id, prosumer_status, feeder_uptime_pct, effective_probability):
         return # Exit early if confounded
 
-    # 2. Soft-Warning Agent
-    if send_soft_warning(consumer_id, shap_values, raw_features, calibrated_probability):
+    # 2. Soft-Warning Agent (uses original or boosted probability)
+    # The seasonal agent would typically adjust the THRESHOLD in agent_loop.py,
+    # not within dispatch_agent, but here's a conceptual placeholder if needed.
+    # For now, use effective_probability directly.
+    if send_soft_warning(consumer_id, shap_values, raw_features, effective_probability):
         return # Exit after sending soft warning
 
     # 3. Dual-Router (only reached if no confound or soft warning)
     route_to_dual_channel(consumer_id, shap_values, raw_features, feeder_status, prosumer_status)
 
     # 4. Audit Logger (for non-canceled, non-soft-warning actions)
-    log_audit(consumer_id, calibrated_probability, shap_values, "Sent Analyst View and Field Alert")
+    log_audit(consumer_id, effective_probability, shap_values, "Sent Analyst View and Field Alert")
     # --- AGENT LOGIC ENDS ---
 
 
