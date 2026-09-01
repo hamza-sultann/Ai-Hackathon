@@ -61,6 +61,7 @@ def main():
     
     print("\n[5/7] Calibrating model (Fix 1: ensemble=False, prefit)...")
     calibrator = calibrate_model(model, cal_df, feature_columns_with_iso)
+    joblib.dump(calibrator, 'final_calibrator.joblib')
     
     # Verify probability spread to prevent silent compression
     verify_calibration_spread(calibrator, eval_df, feature_columns_with_iso, min_expected_max=0.5)
