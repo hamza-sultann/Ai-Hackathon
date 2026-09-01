@@ -15,15 +15,19 @@ export const PipelineOverlapChart: React.FC<PipelineOverlapChartProps> = ({ comp
       formatter: '{b}: <strong>{c} Connections</strong> ({d}%)',
     },
     legend: {
-      bottom: '0%',
-      textStyle: { color: '#9BA8A0', fontSize: 11 },
+      bottom: '2%',
+      left: 'center',
+      itemWidth: 10,
+      itemHeight: 10,
+      textStyle: { color: '#9BA8A0', fontSize: 10 },
     },
     series: [
       {
         name: 'Pipeline Detections',
         type: 'pie',
-        radius: ['45%', '70%'],
-        avoidLabelOverlap: false,
+        radius: ['38%', '58%'],
+        center: ['50%', '40%'],
+        avoidLabelOverlap: true,
         itemStyle: {
           borderRadius: 6,
           borderColor: '#101512',
@@ -31,9 +35,16 @@ export const PipelineOverlapChart: React.FC<PipelineOverlapChartProps> = ({ comp
         },
         label: {
           show: true,
-          color: '#F3F7F4',
-          fontSize: 11,
-          formatter: '{b}\n{c} ({d}%)',
+          position: 'outside',
+          color: '#9BA8A0',
+          fontSize: 10,
+          formatter: '{d}%',
+        },
+        labelLine: {
+          show: true,
+          length: 8,
+          length2: 8,
+          lineStyle: { color: '#263129' },
         },
         data: [
           { value: comparison.monthlyOnlyCount, name: 'Monthly Billing Only', itemStyle: { color: CHART_COLORS.monthlyPipeline } },

@@ -243,3 +243,62 @@ export interface SystemOverview {
   monthlyCoveragePercentage: number;
   smartMeterCoveragePercentage: number;
 }
+
+export interface FieldSquad {
+  id: string;
+  name: string;
+  division: string;
+  leaderName: string;
+  assignedJobsCount: number;
+  completedJobsCount: number;
+  activeInspectorsCount: number;
+  vehiclePlate: string;
+  status: 'Active Field' | 'On Break' | 'Standby' | 'Shift Concluded';
+  efficiencyRate: number;
+}
+
+export interface FieldTeamMember {
+  id: string;
+  name: string;
+  designation: string;
+  squadId: string;
+  squadName: string;
+  phone: string;
+  currentStatus: 'On-Site Inspection' | 'En Route' | 'Reviewing Findings' | 'Available' | 'Off-Duty';
+  activeJobId?: string;
+  assignedLocation: string;
+  jobsCompletedToday: number;
+}
+
+export interface AppNotification {
+  id: string;
+  title: string;
+  message: string;
+  timestamp: string;
+  category: 'anomaly' | 'field' | 'system' | 'model';
+  read: boolean;
+  priority: 'high' | 'medium' | 'low';
+  targetUrl?: string;
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole | 'supervisor';
+  division: string;
+  status: 'Active' | 'Inactive' | 'Suspended';
+  lastLogin: string;
+  permissions: string[];
+}
+
+export interface SystemConfig {
+  calibratedRiskThreshold: number; // e.g. 75
+  treeShapTopFeaturesCount: number; // e.g. 4
+  pmtLossAlertThresholdPercentage: number; // e.g. 12
+  safeguardMode: 'Strict' | 'Standard' | 'Permissive';
+  batchScheduleCron: string;
+  autoDispatchJobCards: boolean;
+  notifyOnHighPriorityResidual: boolean;
+}
+

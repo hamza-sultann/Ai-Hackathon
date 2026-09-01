@@ -1,7 +1,7 @@
 import { apiClient, fetchWithMockFallback } from '../lib/api/client';
 import { API_ENDPOINTS } from '../lib/api/endpoints';
-import { JobCard, InspectionFinding } from '../types';
-import { MOCK_JOB_CARDS } from './mockData';
+import { JobCard, InspectionFinding, FieldSquad, FieldTeamMember } from '../types';
+import { MOCK_JOB_CARDS, MOCK_FIELD_SQUADS, MOCK_TEAM_MEMBERS, MOCK_INSPECTION_HISTORY } from './mockData';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -40,6 +40,21 @@ export const fieldApi = {
     );
   },
 
+  getFieldSquads: async (): Promise<FieldSquad[]> => {
+    await delay(200);
+    return [...MOCK_FIELD_SQUADS];
+  },
+
+  getTeamMembers: async (): Promise<FieldTeamMember[]> => {
+    await delay(200);
+    return [...MOCK_TEAM_MEMBERS];
+  },
+
+  getInspectionHistory: async (): Promise<any[]> => {
+    await delay(250);
+    return [...MOCK_INSPECTION_HISTORY];
+  },
+
   submitFinding: async (finding: InspectionFinding): Promise<{ success: boolean; message: string }> => {
     return fetchWithMockFallback(
       async () => {
@@ -73,3 +88,4 @@ export const fieldApi = {
     );
   },
 };
+

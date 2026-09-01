@@ -13,9 +13,22 @@ import { ConsumerInvestigationPage } from './views/ConsumerInvestigationPage';
 import { PipelineComparisonPage } from './views/PipelineComparisonPage';
 import { JobCardsPage } from './views/JobCardsPage';
 import { JobCardDetailPage } from './views/JobCardDetailPage';
+
+// Field Worker Workspace Views
 import { FieldOverviewPage } from './views/FieldOverviewPage';
+import { FieldJobsPage } from './views/FieldJobsPage';
 import { FieldJobDetailPage } from './views/FieldJobDetailPage';
+import { FieldTeamPage } from './views/FieldTeamPage';
+import { FieldHistoryPage } from './views/FieldHistoryPage';
+
+// Admin Workspace Views
 import { AdminPage } from './views/AdminPage';
+import { AdminDataSourcesPage } from './views/AdminDataSourcesPage';
+import { AdminModelsPage } from './views/AdminModelsPage';
+import { AdminUsersPage } from './views/AdminUsersPage';
+import { AdminAuditPage } from './views/AdminAuditPage';
+import { AdminConfigPage } from './views/AdminConfigPage';
+
 import { NotFoundPage } from './views/NotFoundPage';
 
 const queryClient = new QueryClient({
@@ -49,18 +62,18 @@ export const App: React.FC = () => {
 
           {/* Field Inspector / Supervisor Workspace Routes */}
           <Route path={ROUTES.FIELD.ROOT} element={<FieldOverviewPage />} />
-          <Route path={ROUTES.FIELD.JOBS} element={<FieldOverviewPage />} />
+          <Route path={ROUTES.FIELD.JOBS} element={<FieldJobsPage />} />
           <Route path={ROUTES.FIELD.JOB_DETAIL_PARAM} element={<FieldJobDetailPage />} />
-          <Route path={ROUTES.FIELD.TEAM} element={<FieldOverviewPage />} />
-          <Route path={ROUTES.FIELD.HISTORY} element={<FieldOverviewPage />} />
+          <Route path={ROUTES.FIELD.TEAM} element={<FieldTeamPage />} />
+          <Route path={ROUTES.FIELD.HISTORY} element={<FieldHistoryPage />} />
 
           {/* Admin Workspace Routes */}
           <Route path={ROUTES.ADMIN.ROOT} element={<AdminPage />} />
-          <Route path={ROUTES.ADMIN.DATA_SOURCES} element={<AdminPage />} />
-          <Route path={ROUTES.ADMIN.MODELS} element={<AdminPage />} />
-          <Route path={ROUTES.ADMIN.USERS} element={<AdminPage />} />
-          <Route path={ROUTES.ADMIN.AUDIT} element={<AdminPage />} />
-          <Route path={ROUTES.ADMIN.CONFIGURATION} element={<AdminPage />} />
+          <Route path={ROUTES.ADMIN.DATA_SOURCES} element={<AdminDataSourcesPage />} />
+          <Route path={ROUTES.ADMIN.MODELS} element={<AdminModelsPage />} />
+          <Route path={ROUTES.ADMIN.USERS} element={<AdminUsersPage />} />
+          <Route path={ROUTES.ADMIN.AUDIT} element={<AdminAuditPage />} />
+          <Route path={ROUTES.ADMIN.CONFIGURATION} element={<AdminConfigPage />} />
 
           {/* Fallback 404 Route */}
           <Route path="*" element={<NotFoundPage />} />
@@ -71,3 +84,4 @@ export const App: React.FC = () => {
 };
 
 export default App;
+

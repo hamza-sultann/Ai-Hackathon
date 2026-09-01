@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView, animate } from 'framer-motion';
 import { Zap, ShieldCheck, ArrowRight, Activity, Lock, ChevronDown, Search, ClipboardList, Lightbulb, Scale } from 'lucide-react';
 import { ElectricityShader } from '../components/3d/ElectricityShader';
 import { RESPONSIBLE_TERMINOLOGY } from '../config/tokens';
@@ -13,7 +13,7 @@ const ScrollReveal: React.FC<{
   delay?: number;
 }> = ({ children, className = '', delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const isInView = useInView(ref, { once: false, margin: '-80px' });
 
   return (
     <motion.div
@@ -34,7 +34,7 @@ const StaggerContainer: React.FC<{
   className?: string;
 }> = ({ children, className = '' }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const isInView = useInView(ref, { once: false, margin: '-60px' });
 
   return (
     <motion.div
@@ -57,25 +57,42 @@ const staggerChild = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
-/* ─── Counter animation hook ─── */
-const AnimatedCounter: React.FC<{ value: string; color: string; label: string }> = ({
+/* ─── Dynamic Count-Up animation ─── */
+const AnimatedCounter: React.FC<{ value: number; suffix?: string; color: string; label: string }> = ({
   value,
+  suffix = '',
   color,
   label,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: false, margin: '-40px' });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, value, {
+        duration: 1.5,
+        ease: 'easeOut',
+        onUpdate: (latest) => {
+          setCount(Math.floor(latest));
+        },
+      });
+      return () => controls.stop();
+    } else {
+      setCount(0);
+    }
+  }, [isInView, value]);
 
   return (
     <div ref={ref} className="text-center">
       <motion.div
-        className="font-mono-tech text-2xl font-extrabold"
+        className="font-mono-tech text-2xl md:text-3xl font-extrabold"
         style={{ color }}
         initial={{ opacity: 0, scale: 0.5 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+        transition={{ duration: 0.5, type: 'spring', stiffness: 150 }}
       >
-        {value}
+        {count.toLocaleString()}{suffix}
       </motion.div>
       <div className="text-[11px] uppercase tracking-[0.05em] font-bold text-[#9BA8A0] mt-1">
         {label}
@@ -154,7 +171,20 @@ export const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070A09] text-[#F3F7F4] font-sans selection:bg-[#B6F542] selection:text-[#070A09] overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#070A09] text-[#F3F7F4] font-sans selection:bg-[#B6F542] selection:text-[#070A09] overflow-x-hidden">
+      {/* Fixed background shader and grid */}
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+        <ElectricityShader className="absolute inset-0 w-full h-full opacity-45" />
+      </div>
+      <div
+        className="fixed inset-0 z-[1] pointer-events-none opacity-[0.04]"
+        style={{
+          backgroundSize: '40px 40px',
+          backgroundImage:
+            'linear-gradient(to right, rgba(140,148,124,0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(140,148,124,0.3) 1px, transparent 1px)',
+        }}
+      />
+
       {/* ── Top Navigation ── */}
       <header className="fixed top-0 left-0 w-full z-50 bg-[#070A09]/80 backdrop-blur-md border-b border-[#263129]/60 h-16 flex justify-between items-center px-6 transition-colors">
         <div className="flex items-center gap-2">
@@ -189,44 +219,44 @@ export const LandingPage: React.FC = () => {
         ref={heroRef}
         className="relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-16 overflow-hidden"
       >
-        {/* Shader background — fullscreen behind hero, parallax fades on scroll */}
-        <motion.div
-          className="absolute inset-0 w-full h-full z-0 pointer-events-none"
-          style={{ y: shaderY, opacity: shaderOpacity }}
-        >
-          <ElectricityShader className="absolute inset-0 w-full h-full" />
-        </motion.div>
-
-        {/* Subtle grid overlay */}
-        <div
-          className="absolute inset-0 z-[1] pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundSize: '40px 40px',
-            backgroundImage:
-              'linear-gradient(to right, rgba(140,148,124,0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(140,148,124,0.3) 1px, transparent 1px)',
-          }}
-        />
-
         {/* Hero Content */}
         <motion.div
           className="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-6"
           style={{ y: textY }}
         >
+          {/* Tech Badge */}
+          <motion.div
+            className="flex items-center gap-2 px-3 py-1 rounded-full border border-[#B6F542]/30 bg-[#B6F542]/5 font-mono-tech text-xs tracking-wider text-[#B6F542] uppercase"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B6F542] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B6F542]"></span>
+            </span>
+            Grid Observability System // Active
+          </motion.div>
+
           <motion.h1
-            className="font-heading text-5xl md:text-[64px] md:leading-[1.1] font-bold tracking-tighter max-w-[800px]"
+            className="font-heading text-5xl md:text-[72px] md:leading-[1.05] font-extrabold tracking-tighter max-w-[900px] text-white"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
           >
             Find Where the Grid Is{' '}
-            <span className="text-[#B6F542]">Losing Power.</span>
+            <span className="relative inline-block">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B6F542] via-[#63D98A] to-[#40D9E8] drop-shadow-[0_0_20px_rgba(182,245,66,0.3)]">
+                Losing Power.
+              </span>
+            </span>
           </motion.h1>
 
           <motion.p
             className="text-base md:text-lg text-[#9BA8A0] max-w-[600px] leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
             Istikshaf combines grid physics, monthly billing records, smart-meter intelligence, and
             explainable AI to prioritize evidence-backed electricity-loss inspections.
@@ -236,7 +266,7 @@ export const LandingPage: React.FC = () => {
             className="flex flex-col sm:flex-row gap-4 mt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <button
               onClick={() => navigate(ROUTES.WORKSPACES)}
@@ -261,13 +291,13 @@ export const LandingPage: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="text-center border-r border-[#263129]">
-              <AnimatedCounter value="30" color="#F3F7F4" label="Feeders" />
+              <AnimatedCounter value={30} color="#F3F7F4" label="Feeders" />
             </div>
             <div className="text-center border-r border-[#263129]">
-              <AnimatedCounter value="300" color="#F3F7F4" label="PMTs" />
+              <AnimatedCounter value={300} color="#F3F7F4" label="PMTs" />
             </div>
             <div className="text-center">
-              <AnimatedCounter value="10,000" color="#F3F7F4" label="Connections" />
+              <AnimatedCounter value={10000} color="#F3F7F4" label="Connections" />
             </div>
           </motion.div>
 
@@ -294,7 +324,7 @@ export const LandingPage: React.FC = () => {
       {/* ══════════════════════════════════════════════════
           HOW IT WORKS — 4-step pipeline
          ══════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="py-24 px-6 bg-[#0C110E] border-t border-[#263129]">
+      <section id="how-it-works" className="relative z-10 py-24 px-6 bg-[#0C110E]/60 backdrop-blur-sm border-t border-[#263129]">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
             <h2 className="font-heading text-3xl font-semibold text-[#F3F7F4] mb-3">
@@ -310,7 +340,7 @@ export const LandingPage: React.FC = () => {
               <motion.div
                 key={s.num}
                 variants={staggerChild}
-                className="bg-[#070A09] border border-[#263129] rounded-lg p-6 relative group hover:border-[#B6F542]/30 transition-colors"
+                className="holo-card bg-[#070A09]/75 border border-[#263129] rounded-lg p-6 relative group hover:border-[#B6F542]/30 transition-all duration-300"
               >
                 <div className="absolute top-0 right-0 p-4 font-mono-tech text-sm text-[#8c947c]">
                   {s.num}
@@ -331,7 +361,7 @@ export const LandingPage: React.FC = () => {
       {/* ══════════════════════════════════════════════════
           CORE CAPABILITIES — 4 feature cards
          ══════════════════════════════════════════════════ */}
-      <section id="capabilities" className="py-24 px-6 bg-[#070A09] border-t border-[#263129]">
+      <section id="capabilities" className="relative z-10 py-24 px-6 bg-[#070A09]/60 backdrop-blur-sm border-t border-[#263129]">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
             <h2 className="font-heading text-3xl font-semibold text-[#F3F7F4] mb-3">
@@ -347,7 +377,7 @@ export const LandingPage: React.FC = () => {
               <motion.div
                 key={cap.code}
                 variants={staggerChild}
-                className="border border-[#263129] rounded-lg bg-[#0C110E] overflow-hidden flex flex-col md:flex-row group hover:border-[#434935] transition-colors"
+                className="holo-card border border-[#263129] rounded-lg bg-[#0C110E]/75 overflow-hidden flex flex-col md:flex-row group hover:border-[#434935] transition-all duration-300"
               >
                 <div className="md:w-1/3 bg-[#161D19] flex items-center justify-center p-8 border-r border-[#263129]">
                   <Activity
@@ -369,7 +399,7 @@ export const LandingPage: React.FC = () => {
                       style={{ backgroundColor: cap.color }}
                       initial={{ width: 0 }}
                       whileInView={{ width: '100%' }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false }}
                       transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     />
                   </div>
@@ -385,7 +415,7 @@ export const LandingPage: React.FC = () => {
          ══════════════════════════════════════════════════ */}
       <section
         id="responsible-use"
-        className="py-24 px-6 bg-[#0C0F06] border-t border-[#263129] relative overflow-hidden"
+        className="relative z-10 py-24 px-6 bg-[#0C0F06]/60 backdrop-blur-sm border-t border-[#263129] overflow-hidden"
       >
         {/* Grid texture overlay */}
         <div
@@ -462,7 +492,7 @@ export const LandingPage: React.FC = () => {
       {/* ══════════════════════════════════════════════════
           FOOTER
          ══════════════════════════════════════════════════ */}
-      <footer className="bg-[#161D19] border-t border-[#263129] py-12 px-6">
+      <footer className="relative z-10 bg-[#161D19]/80 backdrop-blur-sm border-t border-[#263129] py-12 px-6">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
