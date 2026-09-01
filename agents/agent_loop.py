@@ -26,12 +26,25 @@ def main():
     CALIBRATOR_PATH = 'final_calibrator.joblib' # Assumed path for the saved calibrator object
     TEMP_JSON_PATH = 'temp_flagged_input.json'
 
-    # Feature columns used by the model (as defined in run_pipeline.py)
+    # Feature columns used by the model.
+    # IMPORTANT: This list must match the feature_columns used in run_pipeline.py
+    # and the features present in the eval.parquet file after feature engineering.
+    # These are the features the isolation forest imputer expects.
     FEATURE_COLUMNS_BASE = [
-        'pmt_loss_delta_pct', 'usage_deviation', 'peer_deviation',
-        'arrears_ratio', 'seasonal_residual', 'rolling_trend_3mo',
-        'feeder_uptime_adj_deviation', 'prosumer_gated_usage_deviation'
+        'pmt_loss_delta_pct',
+        'pmt_loss_rank',
+        'usage_deviation',
+        'fixed_baseline_deviation',
+        'cusum_max_deviation',
+        'months_since_detected_break',
+        'peer_deviation',
+        'arrears_ratio',
+        'seasonal_residual',
+        'rolling_trend_3mo',
+        'feeder_uptime_adj_deviation',
+        'prosumer_gated_usage_deviation'
     ]
+    # The model features include the isolation forest score calculated later
     FEATURE_COLUMNS_WITH_ISO = FEATURE_COLUMNS_BASE + ['iso_forest_oof_score']
 
     print("Loading evaluation data...")

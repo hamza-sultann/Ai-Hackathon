@@ -20,6 +20,7 @@ def main():
     eval_df = pd.read_parquet('output/eval.parquet')
     
     print("\n[2/7] Engineering features (including Fix 2, 3, 4)...")
+    # Apply feature engineering
     train_df = build_features(train_df)
     cal_df = build_features(cal_df)
     eval_df = build_features(eval_df)
@@ -51,6 +52,7 @@ def main():
     final_imputer = joblib.load('iso_forest_imputer.joblib')
     
     def score_inference(df):
+        # Use the feature_columns list defined at the start of main()
         X = df[feature_columns]
         X_imp = final_imputer.transform(X)
         df['iso_forest_oof_score'] = final_iso.score_samples(X_imp)
