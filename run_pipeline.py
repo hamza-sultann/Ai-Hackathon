@@ -88,5 +88,14 @@ def main():
     view_df = generate_analyst_view(shap_df)
     print(view_df.head(5).to_string(index=False))
 
+    # --- ADDED SAVE STEP ---
+    # Save the feature-engineered eval_df back to the parquet file
+    # so that agent_loop.py can find the required columns.
+    print("\nSaving feature-engineered eval.parquet...")
+    eval_df.to_parquet('output/eval.parquet')
+    print("Done.")
+    # --- END ADDED SAVE STEP ---
+
+
 if __name__ == '__main__':
     main()

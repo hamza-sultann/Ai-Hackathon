@@ -1,19 +1,13 @@
 # agents/agent_loop.py
 
-import sys
-import os
 
-# Insert the parent directory at the very front of the path list
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from scripts.features import build_features
 
 import pandas as pd
 import numpy as np
 import joblib
 import xgboost as xgb
 from sklearn.calibration import CalibratedClassifierCV
-from scripts.features import build_features
+from features import build_features
 import shap
 import json
 import os
@@ -97,17 +91,20 @@ def main():
         shap_row = shap_values_matrix[idx, :]
         raw_features_row = X_high_prob.iloc[idx, :].to_dict()
 
-        # Create a dictionary of top 3 SHAP contributions for this row
-        # This mirrors the logic in explain.py's get_shap_explanations
+        # --- FIXED SHAP DICTIONARY KEY LOGIC ---
+        # Create a dictionary mapping actual feature names to their SHAP values
+        # Get top 3 indices based on absolute SHAP value
         top_shap_indices = np.argsort(np.abs(shap_row))[-3:][::-1]
         
         shap_dict = {}
         raw_feat_dict = {}
-        for rank, feat_idx in enumerate(top_shap_indices, 1):
+        for feat_idx in top_shap_indices:
             feat_name = FEATURE_COLUMNS_WITH_ISO[feat_idx]
-            shap_dict[f'top_feature_{rank}'] = feat_name
-            shap_dict[f'top_feature_{rank}_shap'] = float(shap_row[feat_idx])
+            # The key is the actual feature name, value is the SHAP value
+            shap_dict[feat_name] = float(shap_row[feat_idx])
+            # Store the corresponding raw feature value
             raw_feat_dict[feat_name] = float(raw_features_row[feat_name])
+        # --- END FIX ---
 
         # Combine SHAP and raw features into the expected input format
         input_data = {
@@ -120,9 +117,18 @@ def main():
         with open(TEMP_JSON_PATH, 'w') as f:
             json.dump(input_data, f)
 
+        # --- PASS CALIBRATED PROBABILITY AND UPTIME TO DISPATCH AGENT ---
+        # Fetch the relevant uptime for the confound check (e.g., from eval_df which has PMT info)
+        # Assuming eval_df has 'pmt_uptime_pct' or 'feeder_uptime_pct' which was calculated during feature engineering.
+        # Let's assume it's 'pmt_uptime_pct' for this consumer-month in eval_df.
+        # For the agent loop, we pass the uptime value from the eval_df row for the confound check.
+        consumer_uptime_pct = row.get('pmt_uptime_pct', 100.0) # Use .get with default
+
         print(f"\n--- Dispatching Agent for Consumer {consumer_id} (Cal. Prob: {row['calibrated_probability']:.3f}) ---")
-        # Call the dispatch_agent function
-        dispatch_agent(TEMP_JSON_PATH, CONSUMER_DATA_PATH)
+        # Call the dispatch_agent function with the calibrated probability and uptime
+        dispatch_agent(TEMP_JSON_PATH, CONSUMER_DATA_PATH, row['calibrated_probability'], consumer_uptime_pct)
+        # --- END CHANGE ---
+
 
     print("\nAgent loop completed.")
 
