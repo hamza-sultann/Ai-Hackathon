@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Public+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS — Istikshaf Technical Noir
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --background-primary: #070A09;
+  --background-secondary: #0C110E;
+  --surface-primary: #101512;
+  --surface-elevated: #161D19;
+  --border-subtle: #263129;
+  --text-primary: #F3F7F4;
+  --text-secondary: #9BA8A0;
+  --brand-primary: #B6F542;
+  --brand-hover: #CAFF69;
+  --monthly: #F5B942;
+  --smart-meter: #40D9E8;
+  --healthy: #63D98A;
+  --priority-medium: #FF9F43;
+  --priority-high: #FF6262;
+
+  --font-heading: 'Archivo Narrow', 'Archivo', sans-serif;
+  --font-sans: 'Public Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════ */
+body {
+  margin: 0;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY UTILITY CLASSES — coherent across app
+   ═══════════════════════════════════════════════════════ */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono-tech {
+  font-family: var(--font-mono);
+}
+
+/* Stitch typography scale */
+.text-display {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.text-headline-lg {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.text-headline-md {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.text-headline-sm {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-label-caps {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.text-data-lg {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.text-data-md {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SURFACE LEVELS — from Stitch reference
+   ═══════════════════════════════════════════════════════ */
+.level-1 {
+  background-color: #0C110E;
+}
+
+.level-2 {
+  background-color: #101512;
+  border: 1px solid #263129;
+}
+
+.level-3 {
+  background-color: #161D19;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOLOGRAPHIC CARD EFFECTS
+   ═══════════════════════════════════════════════════════ */
+.holo-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.holo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(182, 245, 66, 0.03) 45%,
+    rgba(64, 217, 232, 0.05) 50%,
+    rgba(245, 185, 66, 0.03) 55%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.6s ease;
+  transform: translateX(-100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.holo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(182, 245, 66, 0) 0%,
+    rgba(182, 245, 66, 0.04) 25%,
+    rgba(64, 217, 232, 0.06) 50%,
+    rgba(245, 185, 66, 0.04) 75%,
+    rgba(182, 245, 66, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.holo-card:hover::before {
+  opacity: 1;
+  transform: translateX(100%);
+}
+
+.holo-card:hover::after {
+  opacity: 1;
+}
+
+.holo-card:hover {
+  border-color: rgba(182, 245, 66, 0.25);
+  box-shadow:
+    0 0 20px rgba(182, 245, 66, 0.05),
+    0 0 60px rgba(64, 217, 232, 0.03),
+    0 8px 32px -4px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Holographic shimmer — animated iridescent sweep */
+.holo-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(182, 245, 66, 0.06) 10%,
+    transparent 20%,
+    rgba(64, 217, 232, 0.06) 30%,
+    transparent 40%,
+    rgba(245, 185, 66, 0.04) 50%,
+    transparent 60%,
+    rgba(99, 217, 138, 0.05) 70%,
+    transparent 80%,
+    rgba(182, 245, 66, 0.06) 90%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: holo-rotate 6s linear infinite;
+  animation-play-state: paused;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.holo-shimmer:hover::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+@keyframes holo-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Colour-specific holo variants */
+.holo-card-cyan:hover {
+  border-color: rgba(64, 217, 232, 0.3);
+  box-shadow:
+    0 0 20px rgba(64, 217, 232, 0.06),
+    0 0 60px rgba(64, 217, 232, 0.03),
+    0 8px 32px -4px rgba(0, 0, 0, 0.5);
+}
+
+.holo-card-amber:hover {
+  border-color: rgba(245, 185, 66, 0.3);
+  box-shadow:
+    0 0 20px rgba(245, 185, 66, 0.06),
+    0 0 60px rgba(245, 185, 66, 0.03),
+    0 8px 32px -4px rgba(0, 0, 0, 0.5);
+}
+
+.holo-card-coral:hover {
+  border-color: rgba(255, 98, 98, 0.3);
+  box-shadow:
+    0 0 20px rgba(255, 98, 98, 0.06),
+    0 0 60px rgba(255, 98, 98, 0.03),
+    0 8px 32px -4px rgba(0, 0, 0, 0.5);
+}
+
+/* Scanline overlay for extra holographic texture */
+.holo-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(182, 245, 66, 0.01) 2px,
+    rgba(182, 245, 66, 0.01) 4px
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.holo-scanlines:hover::after {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLBARS
+   ═══════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a4b3f;
+}
+
+/* ═══════════════════════════════════════════════════════
+   GLASSMORPHISM SURFACE CLASSES
+   ═══════════════════════════════════════════════════════ */
+.bg-surface-primary {
+  background-color: var(--surface-primary);
+}
+
+.bg-surface-elevated {
+  background-color: var(--surface-elevated);
+}
+
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+
+/* ═══════════════════════════════════════════════════════
+   GRID BACKGROUND TEXTURE
+   ═══════════════════════════════════════════════════════ */
+.grid-bg {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(140, 148, 124, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(140, 148, 124, 0.05) 1px, transparent 1px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PRINT STYLES
+   ═══════════════════════════════════════════════════════ */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-family: Arial, sans-serif !important;
+  }
+
+  .no-print, nav, header, sidebar, footer, button, .print-hide {
+    display: none !important;
+  }
+
+  .print-area {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .print-page-break {
+    page-break-after: always;
+  }
+}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consumer Investigation - Istikshaf</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#8c947c",
+                    "on-secondary-fixed-variant": "#004f55",
+                    "inverse-surface": "#e1e4d2",
+                    "inverse-primary": "#476800",
+                    "secondary-container": "#00c0cf",
+                    "on-primary-container": "#4c6e00",
+                    "surface-tint": "#9cd924",
+                    "on-secondary-fixed": "#001f23",
+                    "on-tertiary-container": "#835d00",
+                    "on-surface-variant": "#c2cab0",
+                    "tertiary": "#fffeff",
+                    "on-error": "#690005",
+                    "outline-variant": "#434935",
+                    "on-primary": "#233600",
+                    "surface-container-high": "#272b1f",
+                    "surface-container-highest": "#32362a",
+                    "primary-container": "#b6f542",
+                    "on-tertiary-fixed-variant": "#5e4200",
+                    "error-container": "#93000a",
+                    "secondary": "#45dceb",
+                    "inverse-on-surface": "#2e3225",
+                    "on-secondary": "#00363b",
+                    "surface-container-lowest": "#0c0f06",
+                    "primary": "#fffff3",
+                    "on-tertiary": "#422d00",
+                    "on-tertiary-fixed": "#271900",
+                    "tertiary-container": "#ffdda5",
+                    "surface-container": "#1d2115",
+                    "background": "#11150a",
+                    "on-primary-fixed": "#131f00",
+                    "surface-variant": "#32362a",
+                    "surface-container-low": "#191d12",
+                    "secondary-fixed-dim": "#40d9e8",
+                    "surface-dim": "#11150a",
+                    "surface": "#11150a",
+                    "on-surface": "#e1e4d2",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed": "#ffdea8",
+                    "primary-fixed-dim": "#9cd924",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#354e00",
+                    "on-secondary-container": "#00494f",
+                    "primary-fixed": "#b7f643",
+                    "on-background": "#e1e4d2",
+                    "tertiary-fixed-dim": "#f9bc45",
+                    "surface-bright": "#373b2e",
+                    "secondary-fixed": "#88f3ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-xl": "40px",
+                    "margin": "24px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "stack-lg": "24px",
+                    "stack-md": "16px",
+                    "grid_columns": "12",
+                    "stack-sm": "8px",
+                    "stack-xs": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": [
+                            "Archivo Narrow"
+                    ],
+                    "label-caps": [
+                            "Public Sans"
+                    ],
+                    "body-sm": [
+                            "Public Sans"
+                    ],
+                    "data-md": [
+                            "IBM Plex Mono"
+                    ],
+                    "headline-md": [
+                            "Archivo Narrow"
+                    ],
+                    "headline-sm": [
+                            "Archivo Narrow"
+                    ],
+                    "body-md": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Public Sans"
+                    ],
+                    "headline-lg": [
+                            "Archivo Narrow"
+                    ],
+                    "data-lg": [
+                            "IBM Plex Mono"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-sm": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "data-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom Utilities for strict adherence to spec */
+        .chip-error {
+            background-color: rgba(255, 180, 171, 0.1);
+            color: #ffb4ab;
+        }
+        .btn-primary {
+            background-color: #B6F542;
+            color: #070A09;
+        }
+        .btn-secondary {
+            border: 1px solid #263129;
+            color: #fffff3;
+        }
+        .border-subtle {
+            border-color: #263129;
+        }
+        /* Custom scrollbar for technical feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #11150a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #32362a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #434935;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-black">
+<!-- TopNavBar (Adapted width as navigation shell is suppressed for this focused task) -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-background border-b border-subtle flex justify-between items-center h-16 px-margin">
+<div class="flex items-center gap-gutter">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center h-8 w-8 rounded hover:bg-surface-container-high" title="Back to Dashboard">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md font-semibold text-primary tracking-tight">Istikshaf Grid Monitor</div>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="flex items-center gap-stack-sm border-r border-subtle pr-gutter mr-stack-sm">
+<button class="text-on-surface-variant hover:text-primary transition-all w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+<button class="btn-secondary px-4 py-2 rounded font-data-md text-data-md transition-colors hover:bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">download</span>
+                Export Data
+            </button>
+</div>
+</nav>
+<!-- Main Workspace -->
+<div class="flex flex-1 mt-16 overflow-hidden h-[calc(100vh-64px)]">
+<!-- Center Canvas: Evidence & Investigation -->
+<main class="flex-1 overflow-y-auto p-margin flex flex-col gap-stack-xl">
+<!-- Context Header -->
+<header class="flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Consumer Investigation</h1>
+<div class="flex items-center gap-stack-md mt-unit text-on-surface-variant">
+<span class="font-data-md text-data-md uppercase tracking-wider text-primary-container">ID: C-08124</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-data-md text-data-md uppercase tracking-wider">Meter: MTR-481092</span>
+</div>
+</div>
+<!-- Risk Indicator -->
+<div class="flex flex-col items-end">
+<div class="chip-error px-3 py-1 rounded border border-[#690005] font-data-md text-data-md flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+                            High Priority Alert
+                        </div>
+<div class="flex items-baseline gap-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-widest">Calibrated Risk</span>
+<span class="font-display-lg text-display-lg text-error">91%</span>
+</div>
+<div class="font-data-md text-data-md text-outline mt-1">Pattern: Peak-Hour Deviation</div>
+</div>
+</div>
+</header>
+<!-- Evidence Section (Bento Layout) -->
+<section class="flex flex-col gap-stack-md flex-1">
+<!-- Technical Tabs -->
+<div class="flex border-b border-subtle">
+<button class="px-6 py-3 font-data-md text-data-md text-on-surface-variant hover:bg-surface-container-low transition-colors border-b-2 border-transparent hover:text-primary">
+                        MONTHLY (AMBER)
+                    </button>
+<button class="px-6 py-3 font-data-md text-data-md text-on-surface-variant hover:bg-surface-container-low transition-colors border-b-2 border-transparent hover:text-primary">
+                        SMART METER (CYAN)
+                    </button>
+<button class="px-6 py-3 font-data-md text-data-md text-primary border-b-2 border-primary-container bg-surface-container-low">
+                        COMPARE
+                    </button>
+</div>
+<div class="grid grid-cols-12 gap-gutter mt-stack-sm">
+<!-- Synthesis Card (Full width top) -->
+<div class="col-span-12 bg-surface-container border border-subtle rounded-lg p-stack-lg relative overflow-hidden group">
+<!-- Technical accent -->
+<div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+<div class="flex items-start justify-between">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">psychology</span>
+                                AI SYNTHESIS
+                            </div>
+<div class="font-data-md text-data-md text-outline">MOD-7A-X</div>
+</div>
+<p class="font-body-lg text-body-lg text-primary leading-relaxed mt-2 max-w-4xl">
+                            Monthly records show a moderate decline, while hourly readings reveal repeated drops isolated to peak-tariff hours. PMT residual energy remains elevated during the same periods.
+                        </p>
+</div>
+<!-- Explainable AI -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container border border-subtle rounded-lg p-stack-lg">
+<div class="font-headline-sm text-headline-sm text-primary mb-stack-md border-b border-subtle pb-stack-sm flex items-center justify-between">
+                            Why This Was Flagged
+                            <span class="material-symbols-outlined text-outline text-[20px]" title="Feature Attribution Model">info</span>
+</div>
+<div class="flex flex-col gap-stack-md mt-stack-md">
+<!-- Feature 1 -->
+<div>
+<div class="flex justify-between items-end mb-unit">
+<span class="font-body-md text-body-md text-on-surface">Consumption drop vs Peak Window</span>
+<span class="font-data-md text-data-md text-primary">0.88</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[88%]"></div>
+</div>
+</div>
+<!-- Feature 2 -->
+<div>
+<div class="flex justify-between items-end mb-unit">
+<span class="font-body-md text-body-md text-on-surface">PMT Residual Corroboration</span>
+<span class="font-data-md text-data-md text-primary">0.74</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[74%] opacity-80"></div>
+</div>
+</div>
+<!-- Feature 3 (Minor) -->
+<div>
+<div class="flex justify-between items-end mb-unit">
+<span class="font-body-md text-body-md text-on-surface-variant">Historical Variance (30d)</span>
+<span class="font-data-md text-data-md text-on-surface-variant">0.31</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-outline w-[31%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Safeguard Checks -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container border border-subtle rounded-lg p-stack-lg flex flex-col">
+<div class="font-headline-sm text-headline-sm text-primary mb-stack-md border-b border-subtle pb-stack-sm">
+                            Safeguard Checks
+                        </div>
+<div class="grid grid-cols-2 gap-gutter flex-1">
+<!-- Check 1 -->
+<div class="bg-surface-container-lowest border border-subtle rounded p-stack-sm flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1">Registered Solar</span>
+<div class="font-data-lg text-data-lg text-primary">No</div>
+</div>
+<!-- Check 2 -->
+<div class="bg-surface-container-lowest border border-subtle rounded p-stack-sm flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1">Outage Impact</span>
+<div class="font-data-lg text-data-lg text-primary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                                    Normalized
+                                </div>
+</div>
+<!-- Check 3 -->
+<div class="bg-surface-container-lowest border border-subtle rounded p-stack-sm flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1">Data Quality</span>
+<div class="font-data-lg text-data-lg text-primary">Adequate</div>
+</div>
+<!-- Check 4 -->
+<div class="bg-surface-container-lowest border border-primary-container/30 rounded p-stack-sm flex flex-col justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-primary-container/5"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1 relative z-10">Field Verification</span>
+<div class="font-data-lg text-data-lg text-primary-container relative z-10 flex items-center gap-1">
+                                    Required
+                                    <span class="material-symbols-outlined text-[18px]">assignment_late</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Right Sidebar (Contextual Actions & Details) -->
+<aside class="w-80 bg-surface-container-low border-l border-subtle p-margin flex flex-col justify-between shrink-0">
+<div class="flex flex-col gap-stack-lg">
+<!-- Status Panel -->
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">CURRENT STATUS</div>
+<div class="bg-surface-container border border-subtle rounded p-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">pending_actions</span>
+<div>
+<div class="font-body-md text-body-md text-primary font-medium">Pending Review</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Last updated 12m ago</div>
+</div>
+</div>
+</div>
+<!-- Entity Details Mini -->
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">LOCATION DATA</div>
+<ul class="flex flex-col gap-2 font-data-md text-data-md text-on-surface">
+<li class="flex justify-between border-b border-subtle pb-1">
+<span class="text-outline">Substation</span>
+<span>SUB-9A</span>
+</li>
+<li class="flex justify-between border-b border-subtle pb-1">
+<span class="text-outline">Feeder</span>
+<span>FDR-112</span>
+</li>
+<li class="flex justify-between border-b border-subtle pb-1">
+<span class="text-outline">Phase</span>
+<span>L2</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Action Block -->
+<div class="flex flex-col gap-stack-sm pt-stack-lg border-t border-subtle">
+<button class="btn-primary w-full py-3 rounded font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add_task</span>
+                    Recommend Inspection
+                </button>
+<button class="btn-secondary w-full py-3 rounded font-body-md text-body-md flex items-center justify-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">note_add</span>
+                    Create Job-Card
+                </button>
+</div>
+</aside>
+</div>
+</body></html>

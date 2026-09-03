@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istikshaf - Field Inspector Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&amp;family=IBM+Plex+Mono:wght@500&amp;family=Public+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8c947c",
+                        "on-secondary-fixed-variant": "#004f55",
+                        "inverse-surface": "#e1e4d2",
+                        "inverse-primary": "#476800",
+                        "secondary-container": "#00c0cf",
+                        "on-primary-container": "#4c6e00",
+                        "surface-tint": "#9cd924",
+                        "on-secondary-fixed": "#001f23",
+                        "on-tertiary-container": "#835d00",
+                        "on-surface-variant": "#c2cab0",
+                        "tertiary": "#fffeff",
+                        "on-error": "#690005",
+                        "outline-variant": "#434935",
+                        "on-primary": "#233600",
+                        "surface-container-high": "#272b1f",
+                        "surface-container-highest": "#32362a",
+                        "primary-container": "#b6f542",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "error-container": "#93000a",
+                        "secondary": "#45dceb",
+                        "inverse-on-surface": "#2e3225",
+                        "on-secondary": "#00363b",
+                        "surface-container-lowest": "#0c0f06",
+                        "primary": "#fffff3",
+                        "on-tertiary": "#422d00",
+                        "on-tertiary-fixed": "#271900",
+                        "tertiary-container": "#ffdda5",
+                        "surface-container": "#1d2115",
+                        "background": "#11150a",
+                        "on-primary-fixed": "#131f00",
+                        "surface-variant": "#32362a",
+                        "surface-container-low": "#191d12",
+                        "secondary-fixed-dim": "#40d9e8",
+                        "surface-dim": "#11150a",
+                        "surface": "#11150a",
+                        "on-surface": "#e1e4d2",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdea8",
+                        "primary-fixed-dim": "#9cd924",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#354e00",
+                        "on-secondary-container": "#00494f",
+                        "primary-fixed": "#b7f643",
+                        "on-background": "#e1e4d2",
+                        "tertiary-fixed-dim": "#f9bc45",
+                        "surface-bright": "#373b2e",
+                        "secondary-fixed": "#88f3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-xl": "40px",
+                        "margin": "24px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "grid_columns": "12",
+                        "stack-sm": "8px",
+                        "stack-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Archivo Narrow", "sans-serif"],
+                        "label-caps": ["Public Sans", "sans-serif"],
+                        "body-sm": ["Public Sans", "sans-serif"],
+                        "data-md": ["IBM Plex Mono", "monospace"],
+                        "headline-md": ["Archivo Narrow", "sans-serif"],
+                        "headline-sm": ["Archivo Narrow", "sans-serif"],
+                        "body-md": ["Public Sans", "sans-serif"],
+                        "body-lg": ["Public Sans", "sans-serif"],
+                        "headline-lg": ["Archivo Narrow", "sans-serif"],
+                        "data-lg": ["IBM Plex Mono", "monospace"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "data-md": ["14px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "data-lg": ["18px", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0C110E; color: #e1e4d2; }
+    </style>
+</head>
+<body class="font-body-md antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low fixed left-0 top-0 h-full w-[240px] border-r border-outline-variant flex flex-col py-margin z-50">
+<div class="px-margin mb-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary">Istikshaf</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Utility Ops AI</p>
+</div>
+<div class="px-margin mb-6">
+<button class="w-full bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-2 px-4 rounded-DEFAULT flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                New Inspection
+            </button>
+</div>
+<ul class="flex-1 overflow-y-auto space-y-1">
+<li>
+<a class="flex items-center gap-3 px-margin py-3 hover:bg-surface-container-high transition-colors text-primary font-bold border-r-4 border-primary bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Field Overview
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 hover:bg-surface-container-high transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined">assignment</span>
+                    Assigned Job-Cards
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 hover:bg-surface-container-high transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined">group</span>
+                    Team Queue
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 hover:bg-surface-container-high transition-colors text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined">history</span>
+                    Inspection History
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-margin pt-4 border-t border-outline-variant">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 py-2 text-on-surface-variant hover:text-primary transition-colors font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                        Help Center
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 text-on-surface-variant hover:text-primary transition-colors font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                        Log Out
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="bg-background dark:bg-background fixed top-0 right-0 w-[calc(100%-240px)] z-40 border-b border-outline-variant flex justify-between items-center h-16 px-margin">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-md text-headline-md font-semibold text-primary">Istikshaf Grid Monitor</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[240px] mt-16 p-margin w-full h-[calc(100vh-64px)] overflow-y-auto bg-background">
+<div class="max-w-7xl mx-auto space-y-stack-lg">
+<header>
+<h1 class="font-headline-lg text-headline-lg text-primary">Field Operations</h1>
+</header>
+<!-- Metrics -->
+<div class="grid grid-cols-4 gap-gutter">
+<div class="bg-[#101512] border border-[#263129] p-4 rounded-lg">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Assigned Today</h3>
+<div class="font-data-lg text-data-lg text-primary">8</div>
+</div>
+<div class="bg-[#101512] border border-[#263129] p-4 rounded-lg relative overflow-hidden">
+<div class="absolute inset-0 bg-error/10 pointer-events-none"></div>
+<h3 class="font-label-caps text-label-caps text-error uppercase tracking-wider mb-2 relative z-10">High-Priority</h3>
+<div class="font-data-lg text-data-lg text-error relative z-10">3</div>
+</div>
+<div class="bg-[#101512] border border-[#263129] p-4 rounded-lg">
+<h3 class="font-label-caps text-label-caps text-secondary-container uppercase tracking-wider mb-2">In Progress</h3>
+<div class="font-data-lg text-data-lg text-secondary-container">2</div>
+</div>
+<div class="bg-[#101512] border border-[#263129] p-4 rounded-lg">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Completed Today</h3>
+<div class="font-data-lg text-data-lg text-primary">4</div>
+</div>
+</div>
+<!-- Table -->
+<div class="bg-[#101512] border border-[#263129] rounded-lg overflow-hidden">
+<div class="px-6 py-4 border-b border-[#263129] flex justify-between items-center bg-surface-container-lowest">
+<h2 class="font-headline-sm text-headline-sm text-primary">Assigned Job-Cards</h2>
+<span class="font-data-md text-data-md text-on-surface-variant">ID: TBL-JC-001</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-[#263129]">
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider w-[120px]">Job-Card ID</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Connection ID</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Area</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider w-[100px]">Priority</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Scheduled</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#263129]">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="px-6 py-4 font-data-md text-data-md text-primary">JC-8921</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">CON-443-A</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Sector 4, North Sub</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-error/10 text-error font-label-caps text-[10px] uppercase border border-error/20">High</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Today, 09:00 AM</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-secondary-container/10 text-secondary-container font-body-sm border border-secondary-container/20">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+                                        Inspection Started
+                                    </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="px-6 py-4 font-data-md text-data-md text-primary">JC-8922</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">CON-992-B</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Industrial Park West</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-outline/10 text-outline font-label-caps text-[10px] uppercase border border-outline/20">Normal</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Today, 11:30 AM</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-highest text-on-surface-variant font-body-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">directions_car</span>
+                                        En Route
+                                    </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="px-6 py-4 font-data-md text-data-md text-primary">JC-8923</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">CON-102-C</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Residential Block 7</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-outline/10 text-outline font-label-caps text-[10px] uppercase border border-outline/20">Normal</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Today, 02:00 PM</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-on-surface font-body-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                        Assigned
+                                    </span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="px-6 py-4 font-data-md text-data-md text-primary">JC-8919</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">CON-775-D</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Downtown Core</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-error/10 text-error font-label-caps text-[10px] uppercase border border-error/20">High</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Today, 07:00 AM</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-primary-container/10 text-primary-fixed font-body-sm border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px]">photo_camera</span>
+                                        Evidence Recorded
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>

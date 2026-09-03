@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Istikshaf - Find Where the Grid Is Losing Power.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&amp;family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#8c947c",
+                      "on-secondary-fixed-variant": "#004f55",
+                      "inverse-surface": "#e1e4d2",
+                      "inverse-primary": "#476800",
+                      "secondary-container": "#00c0cf",
+                      "on-primary-container": "#4c6e00",
+                      "surface-tint": "#9cd924",
+                      "on-secondary-fixed": "#001f23",
+                      "on-tertiary-container": "#835d00",
+                      "on-surface-variant": "#c2cab0",
+                      "tertiary": "#fffeff",
+                      "on-error": "#690005",
+                      "outline-variant": "#434935",
+                      "on-primary": "#233600",
+                      "surface-container-high": "#272b1f",
+                      "surface-container-highest": "#32362a",
+                      "primary-container": "#b6f542",
+                      "on-tertiary-fixed-variant": "#5e4200",
+                      "error-container": "#93000a",
+                      "secondary": "#45dceb",
+                      "inverse-on-surface": "#2e3225",
+                      "on-secondary": "#00363b",
+                      "surface-container-lowest": "#0c0f06",
+                      "primary": "#fffff3",
+                      "on-tertiary": "#422d00",
+                      "on-tertiary-fixed": "#271900",
+                      "tertiary-container": "#ffdda5",
+                      "surface-container": "#1d2115",
+                      "background": "#11150a",
+                      "on-primary-fixed": "#131f00",
+                      "surface-variant": "#32362a",
+                      "surface-container-low": "#191d12",
+                      "secondary-fixed-dim": "#40d9e8",
+                      "surface-dim": "#11150a",
+                      "surface": "#11150a",
+                      "on-surface": "#e1e4d2",
+                      "error": "#ffb4ab",
+                      "tertiary-fixed": "#ffdea8",
+                      "primary-fixed-dim": "#9cd924",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#354e00",
+                      "on-secondary-container": "#00494f",
+                      "primary-fixed": "#b7f643",
+                      "on-background": "#e1e4d2",
+                      "tertiary-fixed-dim": "#f9bc45",
+                      "surface-bright": "#373b2e",
+                      "secondary-fixed": "#88f3ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-xl": "40px",
+                      "margin": "24px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "stack-lg": "24px",
+                      "stack-md": "16px",
+                      "grid_columns": "12",
+                      "stack-sm": "8px",
+                      "stack-xs": "4px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Archivo Narrow"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "body-sm": [
+                              "Public Sans"
+                      ],
+                      "data-md": [
+                              "IBM Plex Mono"
+                      ],
+                      "headline-md": [
+                              "Archivo Narrow"
+                      ],
+                      "headline-sm": [
+                              "Archivo Narrow"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Archivo Narrow"
+                      ],
+                      "data-lg": [
+                              "IBM Plex Mono"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(140, 148, 124, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(140, 148, 124, 0.05) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container relative">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant h-16 flex justify-between items-center px-margin transition-colors duration-300">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined font-variation-settings: 'FILL' 1; text-[24px]">account_tree</span>
+<span class="font-headline-md text-headline-md font-semibold tracking-tight">Istikshaf</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#how-it-works">How It Works</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#capabilities">Capabilities</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#responsible-use">Responsible Use</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md" href="#about">About</a>
+</nav>
+<a class="hidden md:flex items-center justify-center bg-primary-container text-[#11150a] px-4 py-2 rounded font-body-md font-medium hover:bg-[#a5e03b] transition-colors" href="/dashboard">
+            Launch Dashboard
+        </a>
+<!-- Mobile Menu Button (Placeholder) -->
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col justify-center items-center text-center px-margin pt-16 overflow-hidden">
+<!-- STITCH_SHADER_START:ANIMATION_12 class="absolute inset-0 w-full h-full z-0 opacity-40 mix-blend-screen" -->
+<div class="absolute inset-0 w-full h-full z-0 opacity-40 mix-blend-screen" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_12" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_12');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+// Pseudo-random hash
+float hash(vec3 p) {
+    p  = fract(p * 0.1031);
+    p += dot(p, p.yzx + 33.33);
+    return fract((p.x + p.y) * p.z);
+}
+
+// 3D Noise for volume/particles
+float noise(vec3 p) {
+    vec3 i = floor(p);
+    vec3 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
+                   mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
+                   mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
+}
+
+void main() {
+    // Normalized coordinates (-1 to 1)
+    vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+    vec2 mouse = u_mouse / u_resolution.xy;
+    
+    // Scroll simulation/holographic distortion strength
+    // u_mouse.y is being used as a proxy for scroll/tilt for this demo
+    float distortion = (sin(u_time * 0.5) * 0.5 + 0.5) * 0.1;
+    
+    // Camera-like rotation
+    float rx = u_time * 0.1 + (mouse.x * 0.5);
+    float ry = u_time * 0.15 + (mouse.y * 0.5);
+    mat2 rotX = mat2(cos(rx), -sin(rx), sin(rx), cos(rx));
+    mat2 rotY = mat2(cos(ry), -sin(ry), sin(ry), cos(ry));
+    
+    // Grid Projection
+    vec3 ray = vec3(uv, 1.0);
+    ray.xz *= rotX;
+    ray.yz *= rotY;
+    
+    // Neon Mesh (3D grid slicing)
+    vec3 gridPos = ray * 4.0;
+    vec3 gv = abs(fract(gridPos) - 0.5);
+    float mesh = smoothstep(0.48, 0.5, max(gv.x, max(gv.y, gv.z)));
+    
+    // Holographic Chromatic Aberration
+    float r = mesh;
+    float g = smoothstep(0.48, 0.5, max(gv.x + distortion, max(gv.y, gv.z)));
+    float b = smoothstep(0.48, 0.5, max(gv.x, max(gv.y + distortion, gv.z)));
+    
+    // Suspended Particles (Volumetric noise)
+    float particles = 0.0;
+    vec3 pPos = ray * 10.0 + u_time * 0.2;
+    float n = noise(pPos);
+    if(n > 0.8) {
+        particles = smoothstep(0.8, 1.0, n) * 0.8;
+    }
+    
+    // Energy Pulses along the mesh
+    float pulse = sin(gridPos.x * 2.0 + gridPos.y * 2.0 + u_time * 5.0) * 0.5 + 0.5;
+    pulse *= mesh;
+    
+    // Colors from Design System
+    vec3 bgColor = vec3(0.027, 0.039, 0.035); // #070A09
+    vec3 neonLime = vec3(0.71, 0.96, 0.26);   // #B6F542
+    vec3 cyanAccent = vec3(0.25, 0.85, 0.91); // #40D9E8 (Smart-meter cyan)
+    
+    // Composite
+    vec3 col = bgColor;
+    col += vec3(r, g, b) * neonLime * 0.4; // Neon mesh with aberration
+    col += pulse * cyanAccent * 0.6;       // Cyan energy pulses
+    col += particles * neonLime;           // Floating nodes
+    
+    // Scanlines / Holographic flicker
+    float scanline = sin(gl_FragCoord.y * 0.5 + u_time * 10.0) * 0.02;
+    col += scanline;
+    
+    // Vignette / Depth fade
+    col *= 1.2 - length(uv);
+    
+    gl_FragColor = vec4(col, 1.0);
+}
+`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_12 -->
+<div class="absolute inset-0 grid-bg z-0 pointer-events-none"></div>
+<div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-stack-lg mt-12">
+<h1 class="font-display-lg text-display-lg md:text-[64px] md:leading-[1.1] font-bold tracking-tighter max-w-[800px] text-primary">
+                    Find Where the Grid Is <span class="text-primary-container">Losing Power.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[600px] leading-relaxed">
+                    Istikshaf combines grid physics, monthly billing records, smart-meter intelligence, and explainable AI to prioritize evidence-backed electricity-loss inspections.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto">
+<a class="flex items-center justify-center bg-primary-container text-[#11150a] px-8 py-4 rounded font-body-lg font-medium hover:bg-[#a5e03b] transition-all transform hover:scale-[1.02] shadow-[0_0_20px_rgba(182,245,66,0.1)]" href="/workspace">
+                        Launch Dashboard
+                        <span class="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
+</a>
+<a class="flex items-center justify-center border border-outline-variant text-primary px-8 py-4 rounded font-body-lg font-medium hover:bg-surface-container-high transition-colors" href="#how-it-works">
+                        See How It Works
+                    </a>
+</div>
+<!-- Metrics -->
+<div class="grid grid-cols-3 gap-8 mt-16 p-6 rounded-lg border border-outline-variant bg-surface-container-lowest/80 backdrop-blur-sm w-full max-w-[700px]">
+<div class="text-center border-r border-outline-variant pr-8">
+<div class="font-data-lg text-data-lg text-primary mb-1">30</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Feeders</div>
+</div>
+<div class="text-center border-r border-outline-variant px-4">
+<div class="font-data-lg text-data-lg text-primary mb-1">300</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">PMTs</div>
+</div>
+<div class="text-center pl-8">
+<div class="font-data-lg text-data-lg text-primary mb-1">10,000</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Connections</div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-2 italic">Synthetic demonstration network</p>
+</div>
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-50 hidden md:block z-10">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-24 px-margin bg-surface-container-low relative border-t border-outline-variant" id="how-it-works">
+<div class="max-w-[1200px] mx-auto">
+<div class="mb-16">
+<h2 class="font-headline-lg text-headline-lg font-semibold text-primary mb-4">How It Works</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">A systematic approach to identifying and verifying technical vs. non-technical grid losses.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Step 1 -->
+<div class="bg-background border border-outline-variant rounded p-6 relative group hover:border-primary-container/30 transition-colors">
+<div class="absolute top-0 right-0 p-4 font-data-md text-data-md text-outline">01</div>
+<div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center mb-6 text-primary">
+<span class="material-symbols-outlined">balance</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Measure Grid Balance</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Calculate physical energy flows against recorded consumption at edge nodes.</p>
+</div>
+<!-- Step 2 -->
+<div class="bg-background border border-outline-variant rounded p-6 relative group hover:border-primary-container/30 transition-colors">
+<div class="absolute top-0 right-0 p-4 font-data-md text-data-md text-outline">02</div>
+<div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center mb-6 text-primary">
+<span class="material-symbols-outlined">troubleshoot</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Detect Anomalies</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Identify statistical deviations in usage patterns comparing historical baselines.</p>
+</div>
+<!-- Step 3 -->
+<div class="bg-background border border-outline-variant rounded p-6 relative group hover:border-primary-container/30 transition-colors">
+<div class="absolute top-0 right-0 p-4 font-data-md text-data-md text-outline">03</div>
+<div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center mb-6 text-primary">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Explain Evidence</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Generate human-readable rationale linking physical models to predicted losses.</p>
+</div>
+<!-- Step 4 -->
+<div class="bg-background border border-outline-variant rounded p-6 relative group hover:border-primary-container/30 transition-colors">
+<div class="absolute top-0 right-0 p-4 font-data-md text-data-md text-outline">04</div>
+<div class="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center mb-6 text-primary">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Prioritize Inspections</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Rank targets by confidence and revenue impact to direct field crews effectively.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Capabilities Section -->
+<section class="py-24 px-margin bg-background relative border-t border-outline-variant" id="capabilities">
+<div class="max-w-[1200px] mx-auto">
+<div class="mb-16">
+<h2 class="font-headline-lg text-headline-lg font-semibold text-primary mb-4">Core Capabilities</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Advanced analytical tools for utility operators.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Capability 1 -->
+<div class="border border-outline-variant rounded bg-surface-container-low overflow-hidden flex flex-col md:flex-row group">
+<div class="md:w-1/3 bg-surface-container-highest flex items-center justify-center p-8 border-r border-outline-variant">
+<span class="material-symbols-outlined text-[64px] text-on-surface-variant group-hover:text-primary transition-colors">monitoring</span>
+</div>
+<div class="p-6 md:w-2/3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Grid Loss Monitoring</h3>
+<span class="font-data-md text-data-md text-outline">SYS-01</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Continuous tracking of technical vs. commercial losses across transformer hierarchies.</p>
+</div>
+</div>
+<!-- Capability 2 -->
+<div class="border border-outline-variant rounded bg-surface-container-low overflow-hidden flex flex-col md:flex-row group">
+<div class="md:w-1/3 bg-surface-container-highest flex items-center justify-center p-8 border-r border-outline-variant">
+<span class="material-symbols-outlined text-[64px] text-on-surface-variant group-hover:text-primary transition-colors">person_search</span>
+</div>
+<div class="p-6 md:w-2/3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Consumer Investigation</h3>
+<span class="font-data-md text-data-md text-outline">INV-02</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Deep dive into individual meter profiles, comparing declared load vs actual draw.</p>
+</div>
+</div>
+<!-- Capability 3 -->
+<div class="border border-outline-variant rounded bg-surface-container-low overflow-hidden flex flex-col md:flex-row group">
+<div class="md:w-1/3 bg-surface-container-highest flex items-center justify-center p-8 border-r border-outline-variant">
+<span class="material-symbols-outlined text-[64px] text-on-surface-variant group-hover:text-primary transition-colors">schedule</span>
+</div>
+<div class="p-6 md:w-2/3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Monthly vs. Hourly Analysis</h3>
+<span class="font-data-md text-data-md text-outline">TMP-03</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Reconcile disparate data frequencies to form a cohesive view of grid health over time.</p>
+</div>
+</div>
+<!-- Capability 4 -->
+<div class="border border-outline-variant rounded bg-surface-container-low overflow-hidden flex flex-col md:flex-row group">
+<div class="md:w-1/3 bg-surface-container-highest flex items-center justify-center p-8 border-r border-outline-variant">
+<span class="material-symbols-outlined text-[64px] text-on-surface-variant group-hover:text-primary transition-colors">assignment</span>
+</div>
+<div class="p-6 md:w-2/3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Inspection Job-Cards</h3>
+<span class="font-data-md text-data-md text-outline">OP-04</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Generate structured field tasks with precise coordinates and expected anomaly types.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Responsible Use Section -->
+<section class="py-24 px-margin bg-surface-container-lowest border-t border-outline-variant relative overflow-hidden" id="responsible-use">
+<!-- Background Texture -->
+<div class="absolute inset-0 opacity-5 pointer-events-none grid-bg"></div>
+<div class="max-w-[800px] mx-auto relative z-10">
+<div class="border border-outline-variant rounded-lg bg-surface p-8 shadow-[0_16px_32px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-4 mb-6">
+<span class="material-symbols-outlined text-primary-container text-[32px]">shield</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-primary">Responsible Use Mandate</h2>
+</div>
+<p class="font-headline-sm text-headline-sm text-primary mb-6 border-l-4 border-primary-container pl-4">
+                        Istikshaf supports inspection decisions. It does not determine guilt.
+                    </p>
+<div class="space-y-4 font-body-md text-body-md text-on-surface-variant">
+<p>The system is designed with safeguards to prevent false positives and protect compliant customers:</p>
+<ul class="list-disc pl-6 space-y-2">
+<li><strong>Solar Prosumer Protection:</strong> Algorithms automatically adjust for bidirectional flows to prevent misflagging legitimate solar generation as theft.</li>
+<li><strong>Outage Normalization:</strong> Missing data periods are identified and isolated to prevent skewed statistical baselines.</li>
+<li><strong>Field Verification Requirement:</strong> All AI-flagged anomalies require physical inspection by certified personnel before administrative action.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant py-12 px-margin" id="about">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="md:col-span-2">
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="font-headline-md text-headline-md font-semibold tracking-tight">Istikshaf</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm">
+                    Utility Ops AI. Precise, Industrial, and Vigilant.
+                </p>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-4">Platform</h4>
+<ul class="space-y-2 font-body-sm text-body-sm">
+<li><a class="text-outline hover:text-primary transition-colors" href="#">Dashboard</a></li>
+<li><a class="text-outline hover:text-primary transition-colors" href="#">Grid Topology</a></li>
+<li><a class="text-outline hover:text-primary transition-colors" href="#">Analytics</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-4">Legal</h4>
+<ul class="space-y-2 font-body-sm text-body-sm">
+<li><a class="text-outline hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-outline hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto mt-12 pt-8 border-t border-outline-variant/50 text-center font-body-sm text-outline">
+            © 2024 Istikshaf Grid Monitor. All rights reserved.
+        </div>
+</footer>
+</body></html>

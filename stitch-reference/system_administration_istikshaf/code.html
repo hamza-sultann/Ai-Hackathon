@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Administration - Istikshaf</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8c947c",
+                        "on-secondary-fixed-variant": "#004f55",
+                        "inverse-surface": "#e1e4d2",
+                        "inverse-primary": "#476800",
+                        "secondary-container": "#00c0cf",
+                        "on-primary-container": "#4c6e00",
+                        "surface-tint": "#9cd924",
+                        "on-secondary-fixed": "#001f23",
+                        "on-tertiary-container": "#835d00",
+                        "on-surface-variant": "#c2cab0",
+                        "tertiary": "#fffeff",
+                        "on-error": "#690005",
+                        "outline-variant": "#434935",
+                        "on-primary": "#233600",
+                        "surface-container-high": "#272b1f",
+                        "surface-container-highest": "#32362a",
+                        "primary-container": "#b6f542",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "error-container": "#93000a",
+                        "secondary": "#45dceb",
+                        "inverse-on-surface": "#2e3225",
+                        "on-secondary": "#00363b",
+                        "surface-container-lowest": "#0c0f06",
+                        "primary": "#fffff3",
+                        "on-tertiary": "#422d00",
+                        "on-tertiary-fixed": "#271900",
+                        "tertiary-container": "#ffdda5",
+                        "surface-container": "#1d2115",
+                        "background": "#11150a",
+                        "on-primary-fixed": "#131f00",
+                        "surface-variant": "#32362a",
+                        "surface-container-low": "#191d12",
+                        "secondary-fixed-dim": "#40d9e8",
+                        "surface-dim": "#11150a",
+                        "surface": "#11150a",
+                        "on-surface": "#e1e4d2",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdea8",
+                        "primary-fixed-dim": "#9cd924",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#354e00",
+                        "on-secondary-container": "#00494f",
+                        "primary-fixed": "#b7f643",
+                        "on-background": "#e1e4d2",
+                        "tertiary-fixed-dim": "#f9bc45",
+                        "surface-bright": "#373b2e",
+                        "secondary-fixed": "#88f3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-xl": "40px",
+                        "margin": "24px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "grid_columns": "12",
+                        "stack-sm": "8px",
+                        "stack-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Archivo Narrow"],
+                        "label-caps": ["Public Sans"],
+                        "body-sm": ["Public Sans"],
+                        "data-md": ["IBM Plex Mono"],
+                        "headline-md": ["Archivo Narrow"],
+                        "headline-sm": ["Archivo Narrow"],
+                        "body-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-lg": ["Archivo Narrow"],
+                        "data-lg": ["IBM Plex Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "data-md": ["14px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "data-lg": ["18px", { "lineHeight": "1", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #070A09; }
+        /* Thin scrollbar for industrial feel */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0c0f06; }
+        ::-webkit-scrollbar-thumb { background: #272b1f; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #434935; }
+    </style>
+</head>
+<body class="text-on-background font-body-md min-h-screen overflow-hidden flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex flex-col py-margin z-50">
+<!-- Brand Header -->
+<div class="px-margin mb-stack-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">electric_bolt</span>
+</div>
+<div>
+<h1 class="font-display-lg text-headline-md font-bold text-primary dark:text-primary leading-tight">Istikshaf</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Utility Ops AI</p>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="px-margin mb-stack-md">
+<button class="w-full bg-primary-container text-on-primary-container font-data-md py-3 px-4 rounded font-medium hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span> New Inspection
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto mt-stack-md">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+                        Grid Topology
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">biotech</span>
+                        Anomaly Detection
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">assignment</span>
+                        Inspection Tasks
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">insights</span>
+                        Analytics
+                    </a>
+</li>
+<!-- Active Item -->
+<li>
+<a class="flex items-center gap-3 px-margin py-3 text-primary font-bold border-r-4 border-primary bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+                        System Config
+                    </a>
+</li>
+</ul>
+</div>
+<!-- Footer Links -->
+<div class="mt-auto pt-stack-md border-t border-outline-variant px-margin space-y-1">
+<a class="flex items-center gap-3 py-2 text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span> Help Center
+            </a>
+<a class="flex items-center gap-3 py-2 text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span> Log Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] z-40 bg-background dark:bg-background border-b border-outline-variant flex justify-between items-center h-16 px-margin">
+<div class="flex items-center gap-stack-lg">
+<h2 class="font-headline-md text-headline-md font-semibold text-primary">Istikshaf Grid Monitor</h2>
+<nav class="hidden md:flex gap-stack-md ml-stack-md">
+<a class="text-on-surface-variant hover:text-primary transition-all font-data-md" href="#">Live View</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-data-md" href="#">Historical</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-data-md" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors border border-outline-variant py-1.5 px-4 rounded font-data-md">Export Data</button>
+<button class="bg-primary-container text-on-primary-container py-1.5 px-4 rounded font-data-md font-medium">Run Analysis</button>
+<div class="flex items-center gap-3 ml-2 border-l border-outline-variant pl-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="mt-16 p-margin overflow-y-auto h-full w-full max-w-[1440px] mx-auto">
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">System Administration</h1>
+<p class="text-on-surface-variant font-body-md">Operational overview of data pipelines, models, and access control.</p>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Health Status Summary (Span 12) -->
+<div class="col-span-12 grid grid-cols-4 gap-gutter mb-stack-md">
+<div class="bg-[#101512] border border-[#263129] rounded p-stack-md flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-on-surface-variant uppercase">Data Pipeline</span>
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+</div>
+<span class="font-data-lg text-primary">Healthy</span>
+<span class="font-body-sm text-on-surface-variant mt-1">Uptime: 99.98%</span>
+</div>
+<div class="bg-[#101512] border border-[#263129] rounded p-stack-md flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-on-surface-variant uppercase">Monthly Dataset</span>
+<span class="material-symbols-outlined text-primary-container">sync</span>
+</div>
+<span class="font-data-lg text-primary">Synced</span>
+<span class="font-body-sm text-on-surface-variant mt-1">Last: 2 hrs ago</span>
+</div>
+<div class="bg-[#101512] border border-[#263129] rounded p-stack-md flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-on-surface-variant uppercase">Smart-Meter Data</span>
+<span class="material-symbols-outlined text-primary-container">sync</span>
+</div>
+<span class="font-data-lg text-primary">Synced</span>
+<span class="font-body-sm text-on-surface-variant mt-1">Streaming active</span>
+</div>
+<div class="bg-[#101512] border border-[#263129] rounded p-stack-md flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-on-surface-variant uppercase">Model Endpoints</span>
+<span class="material-symbols-outlined text-primary-container">dns</span>
+</div>
+<span class="font-data-lg text-primary">Healthy</span>
+<span class="font-body-sm text-on-surface-variant mt-1">Latency: ~45ms</span>
+</div>
+</div>
+<!-- Left Column: Data Sources & Models -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+<!-- Data Sources Table -->
+<div class="bg-[#101512] border border-[#263129] rounded flex flex-col">
+<div class="p-stack-md border-b border-[#263129] flex justify-between items-center">
+<h3 class="font-headline-sm text-primary">Data Sources</h3>
+<span class="font-data-md text-on-surface-variant">DS-01</span>
+</div>
+<div class="p-stack-md overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#263129]">
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Source Name</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Last Update</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Validation Status</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase text-right">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-on-surface">
+<tr class="border-b border-[#263129] hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">Monthly Aggregates</td>
+<td class="py-3">2023-10-27 04:00 UTC</td>
+<td class="py-3">
+<span class="inline-flex items-center gap-1 text-primary-container bg-primary-container/10 px-2 py-0.5 rounded text-xs font-data-md border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px]">check</span> Validated
+                                            </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-[#263129] hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">PMT Balance Logs</td>
+<td class="py-3">2023-10-27 08:15 UTC</td>
+<td class="py-3">
+<span class="inline-flex items-center gap-1 text-primary-container bg-primary-container/10 px-2 py-0.5 rounded text-xs font-data-md border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px]">check</span> Validated
+                                            </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">Smart-Meter Telemetry</td>
+<td class="py-3">Streaming (Live)</td>
+<td class="py-3">
+<span class="inline-flex items-center gap-1 text-[#45dceb] bg-[#45dceb]/10 px-2 py-0.5 rounded text-xs font-data-md border border-[#45dceb]/20">
+<span class="material-symbols-outlined text-[14px]">autorenew</span> Processing
+                                            </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Model Services Table -->
+<div class="bg-[#101512] border border-[#263129] rounded flex flex-col">
+<div class="p-stack-md border-b border-[#263129] flex justify-between items-center">
+<h3 class="font-headline-sm text-primary">Model Services</h3>
+<span class="font-data-md text-on-surface-variant">ML-01</span>
+</div>
+<div class="p-stack-md overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#263129]">
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Service Name</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Type</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase">Status</th>
+<th class="pb-2 font-label-caps text-on-surface-variant uppercase text-right">Metrics</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-on-surface">
+<tr class="border-b border-[#263129] hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">Isolation Forest</td>
+<td class="py-3">Anomaly Detection</td>
+<td class="py-3">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="py-3 text-right font-data-md text-on-surface-variant">F1: 0.92</td>
+</tr>
+<tr class="border-b border-[#263129] hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">XGBoost Risk Model</td>
+<td class="py-3">Classification</td>
+<td class="py-3">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="py-3 text-right font-data-md text-on-surface-variant">AUC: 0.94</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-3 font-data-md">TreeSHAP Explainer</td>
+<td class="py-3">Interpretability</td>
+<td class="py-3">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span>Active</span>
+</div>
+</td>
+<td class="py-3 text-right font-data-md text-on-surface-variant">Latency: 12ms</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: User Access -->
+<div class="col-span-12 lg:col-span-4">
+<div class="bg-[#101512] border border-[#263129] rounded flex flex-col h-full">
+<div class="p-stack-md border-b border-[#263129] flex justify-between items-center">
+<h3 class="font-headline-sm text-primary">User Access</h3>
+<span class="font-data-md text-on-surface-variant">SEC-01</span>
+</div>
+<div class="p-stack-md">
+<div class="bg-[#191d12] border border-outline-variant rounded p-3 mb-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[20px]">info</span>
+<p class="font-body-sm text-on-surface-variant leading-tight">Access controls shown for prototype demonstration only.</p>
+</div>
+<ul class="space-y-3">
+<li class="flex justify-between items-center p-2 hover:bg-surface-container-high rounded transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div>
+<p class="font-data-md text-on-surface">O. Engineer</p>
+<p class="font-body-sm text-on-surface-variant">sysadmin@istikshaf.local</p>
+</div>
+</div>
+<span class="text-xs font-label-caps border border-[#263129] px-2 py-1 rounded text-on-surface-variant">Admin</span>
+</li>
+<li class="flex justify-between items-center p-2 hover:bg-surface-container-high rounded transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div>
+<p class="font-data-md text-on-surface">Data Analyst 1</p>
+<p class="font-body-sm text-on-surface-variant">analyst@istikshaf.local</p>
+</div>
+</div>
+<span class="text-xs font-label-caps border border-[#263129] px-2 py-1 rounded text-on-surface-variant">Analyst</span>
+</li>
+<li class="flex justify-between items-center p-2 hover:bg-surface-container-high rounded transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div>
+<p class="font-data-md text-on-surface">Field Team Alpha</p>
+<p class="font-body-sm text-on-surface-variant">field@istikshaf.local</p>
+</div>
+</div>
+<span class="text-xs font-label-caps border border-[#263129] px-2 py-1 rounded text-on-surface-variant">Field</span>
+</li>
+</ul>
+<button class="w-full mt-4 border border-[#263129] text-on-surface hover:text-primary hover:border-outline-variant py-2 rounded font-data-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span> Manage Roles
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
