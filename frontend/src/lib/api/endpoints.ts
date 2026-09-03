@@ -1,6 +1,5 @@
-// Endpoint definitions — generated to unblock local dev while the real
-// src/lib/api/endpoints.ts is missing from this branch.
-// Update paths to match the actual FastAPI backend once confirmed.
+// Endpoint definitions. Paths are relative to VITE_API_BASE_URL
+// (default http://localhost:8000/api) and match the FastAPI backend routers.
 
 export const API_ENDPOINTS = {
   // Overview

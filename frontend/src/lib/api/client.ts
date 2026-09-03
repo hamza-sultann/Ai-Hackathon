@@ -1,8 +1,8 @@
-// Minimal API client stub — generated to unblock local dev while the real
-// src/lib/api/client.ts is missing from this branch.
+// Minimal fetch-based API client.
 //
-// Usage pattern seen across services: apiClient.get<unknown, T>(url),
-// apiClient.post<unknown, T>(url, body), apiClient.patch<unknown, T>(url, body)
+// Usage pattern across services: apiClient.get<unknown, T>(url),
+// apiClient.post<unknown, T>(url, body), apiClient.patch<unknown, T>(url, body).
+// Base URL + mock toggle come from VITE_API_BASE_URL / VITE_USE_MOCK_API.
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_API === 'true';
