@@ -1,7 +1,3 @@
-// Endpoint definitions — generated to unblock local dev while the real
-// src/lib/api/endpoints.ts is missing from this branch.
-// Update paths to match the actual FastAPI backend once confirmed.
-
 export const API_ENDPOINTS = {
   // Overview
   OVERVIEW: '/overview',
@@ -10,6 +6,8 @@ export const API_ENDPOINTS = {
   ADMIN_DATA_SOURCES: '/admin/data-sources',
   ADMIN_MODEL_SERVICES: '/admin/model-services',
   ADMIN_AUDIT: '/admin/audit',
+  ADMIN_HEALTH: '/admin/system-health',
+  ADMIN_USERS: '/admin/users',
 
   // Analyses
   ANALYSES: '/analyses',
@@ -21,6 +19,7 @@ export const API_ENDPOINTS = {
   // Field
   FIELD_OVERVIEW: '/field/overview',
   FIELD_JOBS: '/field/jobs',
+  FIELD_TEAM: '/field/team',
   JOB_CARD_FINDINGS: (jobCardId: string) => `/field/jobs/${jobCardId}/findings`,
 
   // Grid
@@ -38,4 +37,6 @@ export const API_ENDPOINTS = {
   // Job Cards
   JOB_CARDS: '/job-cards',
   JOB_CARD_DETAIL: (id: string) => `/job-cards/${id}`,
-};
+  JOB_CARD_ASSIGN: (id: string) => `/job-cards/${id}`,
+} as const;
+
