@@ -3,6 +3,9 @@
 import pandas as pd
 import json
 from datetime import datetime, timezone
+from deep_translator import GoogleTranslator
+import os
+from datetime import datetime, timezone, timedelta
 
 def check_confound(consumer_id, prosumer_status, uptime_pct, calibrated_probability):
     """
@@ -17,42 +20,71 @@ def check_confound(consumer_id, prosumer_status, uptime_pct, calibrated_probabil
     return False
 
 def recidivism_checker(consumer_id):
-    """
-    Checks if the consumer has been flagged before.
-    Returns True if a repeat offender.
-    """
-    # TODO: Implement logic to query past investigation log
-    print(f"[TODO: Recidivism Checker] Checking history for {consumer_id}")
-    return False # Placeholder - assume not a repeat for now
+    """Checks if the consumer has been flagged before in our own log."""
+    if not os.path.exists("audit_log.jsonl"):
+        return False
+        
+    flag_count = 0
+    with open("audit_log.jsonl", "r") as f:
+        for line in f:
+            record = json.loads(line)
+            if record.get("consumer_id") == consumer_id:
+                flag_count += 1
+                
+    # If they've been flagged more than once before, they are a repeat offender
+    return flag_count > 1
 
 def case_dedup_guard(consumer_id):
     """
     Checks if the consumer is already under investigation.
-    Returns True if already being investigated.
+    Returns True if alerted within the last 1 minute (demo mode) to prevent spam.
     """
-    # TODO: Implement logic to check investigation status DB
-    print(f"[TODO: Case Dedup Guard] Checking status for {consumer_id}")
-    return False # Placeholder - assume not under investigation
-
-def seasonal_agent(current_month, base_threshold):
-    """
-    Adjusts the base probability threshold based on the month.
-    Returns the adjusted threshold.
-    """
-    # TODO: Implement seasonal adjustment logic
-    print(f"[TODO: Seasonal Agent] Adjusting threshold for month {current_month}")
-    # Example: Maybe summer is harder to detect, so lower threshold slightly?
-    # adj = {'06', '07', '08'}.get(current_month, 0.0) # Dummy logic
-    return base_threshold # Placeholder - return original threshold
+    if not os.path.exists("audit_log.jsonl"):
+        return False
+        
+    now = datetime.now(timezone.utc)
+    
+    with open("audit_log.jsonl", "r") as f:
+        # Read the log to find recent alerts
+        for line in f:
+            try:
+                record = json.loads(line)
+                if record.get("consumer_id") == consumer_id:
+                    # Parse timestamp string back into datetime object
+                    log_time = datetime.fromisoformat(record.get("timestamp"))
+                    
+                    # For Hackathon Demo: Block if last alert was less than 1 minute ago
+                    if now - log_time < timedelta(minutes=1):
+                        return True
+            except Exception:
+                continue
+                
+    return False
+def seasonal_agent(base_threshold):
+    """Adjusts the base probability threshold based on the current season."""
+    current_month = datetime.now().month
+    
+    # Summer/Monsoon (June to August) - Theft is more common (AC spikes)
+    # Lower the threshold slightly to catch more cases
+    if current_month in [6, 7, 8]:
+        return base_threshold - 0.05
+        
+    # Winter (December to February) - Theft is less common
+    # Raise the threshold to prevent false alarms
+    elif current_month in [12, 1, 2]:
+        return base_threshold + 0.05
+        
+    return base_threshold
 
 def urdu_localization_agent(text_in_english):
-    """
-    Translates the English text into Urdu/Roman Urdu.
-    Returns the translated text.
-    """
-    # TODO: Integrate with a translation API or model
-    print(f"[TODO: Urdu Localization Agent] Translating: {text_in_english}")
-    return f"[URDU_SIMULATION] {text_in_english}" # Placeholder translation
+    """Translates the English text into Urdu."""
+    try:
+        # Uses the free Google Translate endpoint
+        translated = GoogleTranslator(source='en', target='ur').translate(text_in_english)
+        return translated
+    except Exception as e:
+        print(f"Translation failed: {e}")
+        return text_in_english # Fallback to English if it fails
 
 def send_soft_warning(consumer_id, shap_values, raw_features, calibrated_probability):
     """
