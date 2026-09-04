@@ -107,49 +107,52 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <>
-      <header className="no-print h-14 bg-[#0C110E] border-b border-[#263129] px-6 flex items-center justify-between gap-4 sticky top-0 z-30">
+      <header className="no-print h-14 bg-[#0C110E] border-b border-[#263129] px-4 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-30">
         {/* Left: Global Search */}
-        <div className="flex items-center gap-4 flex-1 max-w-md">
+        <div className="flex items-center gap-3 flex-1 min-w-0 max-w-xs md:max-w-sm xl:max-w-md">
           <div className="relative w-full">
-            <Search className="w-4 h-4 text-[#9BA8A0] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#9BA8A0] absolute left-3 top-1/2 -translate-y-1/2 shrink-0 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search Feeders (FDR-08), PMTs (PMT-081), Consumer IDs (C-08124)..."
+              placeholder="Search Feeders, PMTs, Consumers..."
               className="w-full pl-9 pr-4 py-1.5 bg-[#101512] border border-[#263129] rounded-lg text-xs text-[#F3F7F4] placeholder-[#9BA8A0]/60 focus:outline-none focus:border-[#B6F542] transition-colors font-mono-tech"
             />
           </div>
         </div>
 
         {/* Right: Refresh, Health, Role Switcher, Notifications, Avatar */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Data Health & Refresh */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-[#101512] border border-[#263129] rounded-lg text-xs text-[#9BA8A0]">
+          <div className="hidden md:flex items-center gap-2 px-2.5 py-1 bg-[#101512] border border-[#263129] rounded-lg text-xs text-[#9BA8A0]">
             <span className="flex items-center gap-1.5">
               <Activity className="w-3.5 h-3.5 text-[#63D98A]" />
               <span className="font-semibold text-[#F3F7F4]">{dataHealthStatus}</span>
             </span>
-            <span className="text-[#263129]">|</span>
-            <span className="font-mono-tech text-[11px]">Synced {lastRefresh}</span>
+            <span className="text-[#263129] hidden xl:inline">|</span>
+            <span className="font-mono-tech text-[11px] hidden xl:inline">Synced {lastRefresh}</span>
           </div>
 
           {/* Run Analysis CTA */}
           {onOpenAnalysisDrawer && (
             <button
               onClick={onOpenAnalysisDrawer}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#B6F542] hover:bg-[#CAFF69] text-[#070A09] rounded-lg text-xs font-semibold transition-all shadow-sm active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-[#B6F542] hover:bg-[#CAFF69] text-[#070A09] rounded-lg text-xs font-semibold transition-all shadow-sm active:scale-95 shrink-0"
+              title="Run New Analysis"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Run New Analysis</span>
+              <span className="hidden xl:inline">Run New Analysis</span>
+              <span className="hidden sm:inline xl:hidden">Analyze</span>
             </button>
           )}
 
-          {/* Prototype Access Badge */}
-          <div className="hidden lg:flex items-center px-2.5 h-[24px] rounded-full border border-[#263129] text-[#9BA8A0] text-[11px] font-medium shrink-0">
-            Prototype access — authentication disabled
+          {/* Prototype Access Badge (only on ultra-wide screens to prevent overflow) */}
+          <div className="hidden 2xl:flex items-center px-2.5 h-[24px] rounded-full border border-[#263129] text-[#9BA8A0] text-[11px] font-medium shrink-0">
+            Prototype access — auth disabled
           </div>
 
           {/* Role Switcher */}
           <RoleSwitcher currentRole={currentRole} />
+
 
           {/* Notifications Popover */}
           <div className="relative" ref={notifRef}>
