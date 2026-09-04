@@ -1,0 +1,51 @@
+export const API_ENDPOINTS = {
+  // Overview
+  OVERVIEW: '/overview',
+
+  // Admin
+  ADMIN_DATA_SOURCES: '/admin/data-sources',
+  ADMIN_SYNC_DATA_SOURCE: (sourceId: string) => `/admin/data-sources/${sourceId}/sync`,
+  ADMIN_MODEL_SERVICES: '/admin/model-services',
+  ADMIN_TEST_MODEL: (modelId: string) => `/admin/model-services/${modelId}/test`,
+  ADMIN_AUDIT: '/admin/audit',
+  ADMIN_HEALTH: '/admin/system-health',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_CONFIG: '/admin/config',
+  ADMIN_NOTIFICATIONS: '/admin/notifications',
+
+  // Analyses
+  ANALYSES: '/analyses',
+  ANALYSIS_STATUS: (jobId: string) => `/analyses/${jobId}`,
+
+  // Comparison
+  PIPELINE_COMPARISON: '/comparison/pipeline',
+
+  // Field
+  FIELD_OVERVIEW: '/field/overview',
+  FIELD_JOBS: '/field/jobs',
+  FIELD_SQUADS: '/field/squads',
+  FIELD_TEAM: '/field/team',
+  FIELD_HISTORY: '/field/history',
+  JOB_CARD_FINDINGS: (jobCardId: string) => `/field/jobs/${jobCardId}/findings`,
+
+  // Grid
+  FEEDERS: '/grid/feeders',
+  FEEDER_DETAIL: (feederId: string) => `/grid/feeders/${feederId}`,
+  FEEDER_PMTS: (feederId: string) => `/grid/feeders/${feederId}/pmts`,
+  PMT_DETAIL: (pmtId: string) => `/grid/pmts/${pmtId}`,
+  PMT_CONSUMERS: (pmtId: string) => `/grid/pmts/${pmtId}/consumers`,
+
+  // Investigations
+  INVESTIGATIONS: '/investigations',
+  INVESTIGATION_DETAIL: (consumerId: string) => `/investigations/${consumerId}`,
+  INVESTIGATION_EXPLANATION: (consumerId: string) => `/investigations/${consumerId}/explanation`,
+  INVESTIGATION_MONTHLY: (consumerId: string) => `/investigations/${consumerId}/monthly`,
+  INVESTIGATION_HOURLY: (consumerId: string) => `/investigations/${consumerId}/hourly`,
+
+  // Job Cards
+  JOB_CARDS: '/job-cards',
+  JOB_CARD_DETAIL: (id: string) => `/job-cards/${id}`,
+  JOB_CARD_ASSIGN: (id: string) => `/job-cards/${id}`,
+} as const;
+
+
