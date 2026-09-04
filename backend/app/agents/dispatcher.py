@@ -7,8 +7,10 @@ narratives the frontend renders.
 """
 from __future__ import annotations
 
+import json
+import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from app.ml.scorer import RiskScore
 
@@ -34,6 +36,8 @@ class DispatchResult:
     field_alert_urdu: str = ""
     pmt_corroboration: str = ""
     cancelled: bool = False
+    is_recidivist: bool = False
+    is_duplicate: bool = False
 
 
 def run_dispatch(
@@ -51,7 +55,8 @@ def run_dispatch(
     prosumer = bool(consumer.get("is_registered_prosumer", False))
     top = score.contributions[0] if score.contributions else None
 
-    safeguards = _safeguards(
+    safeguards, is_repeat, is_dup = _safeguards(
+        consumer_id=cid,
         prosumer=prosumer,
         feeder_uptime_pct=feeder_uptime_pct,
         pmt_loss_rank=pmt_loss_rank,
@@ -68,12 +73,27 @@ def run_dispatch(
             probability=prob,
             safeguards=safeguards,
             cancelled=True,
+            is_recidivist=is_repeat,
+            is_duplicate=is_dup,
             analyst_summary=(
                 "Alert suppressed: "
                 + ("registered solar prosumer on file. " if prosumer else "")
                 + ("feeder uptime critically low (systemic load-shedding). " if not prosumer else "")
                 + "No field action recommended without new evidence."
             ),
+        )
+
+    # Deduplication guard: if already alerted recently in demo/operational mode
+    if is_dup:
+        return DispatchResult(
+            consumer_id=cid,
+            routing_decision="Consolidated - Alert Active",
+            probability=prob,
+            safeguards=safeguards,
+            cancelled=True,
+            is_recidivist=is_repeat,
+            is_duplicate=True,
+            analyst_summary=f"Investigation already active for consumer {cid} within recent window. Alert consolidated to prevent duplicate dispatch.",
         )
 
     reasons = ", ".join(c.description for c in score.contributions[:2]) or "multivariate anomaly signature"
@@ -93,6 +113,9 @@ def run_dispatch(
             field_alert += " (Registered solar/net-metering on file.)"
 
     analyst_summary = _analyst_summary(score, consumer, top)
+    if is_repeat:
+        analyst_summary += " [REPEAT OFFENDER: multiple anomaly flags on record]."
+
     pmt_text = _pmt_corroboration(pmt_loss_rank, pmt_residual_kwh)
     urdu_alert = urdu_localization_agent(field_alert) if (include_urdu and field_alert) else ""
 
@@ -105,6 +128,8 @@ def run_dispatch(
         field_alert=field_alert,
         field_alert_urdu=urdu_alert,
         pmt_corroboration=pmt_text,
+        is_recidivist=is_repeat,
+        is_duplicate=is_dup,
     )
 
 
@@ -134,21 +159,74 @@ def audit_record(result: DispatchResult) -> dict:
     }
 
 
+def _find_audit_log() -> str | None:
+    for path in ("audit_log.jsonl", "../audit_log.jsonl", "backend/audit_log.jsonl"):
+        if os.path.exists(path):
+            return path
+    return None
+
+
+def recidivism_checker(consumer_id: str) -> bool:
+    """Checks if the consumer has been flagged before in our own log."""
+    log_path = _find_audit_log()
+    if not log_path:
+        return False
+    flag_count = 0
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                if record.get("consumer_id") == consumer_id:
+                    flag_count += 1
+    except Exception:
+        return False
+    return flag_count > 1
+
+
+def case_dedup_guard(consumer_id: str) -> bool:
+    """Checks if the consumer has been recently alerted (within 1 min demo mode)."""
+    log_path = _find_audit_log()
+    if not log_path:
+        return False
+    now = datetime.now(timezone.utc)
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                if record.get("consumer_id") == consumer_id:
+                    ts = record.get("timestamp")
+                    if ts:
+                        log_time = datetime.fromisoformat(ts)
+                        if now - log_time < timedelta(minutes=1):
+                            return True
+    except Exception:
+        return False
+    return False
+
+
 def _safeguards(
     *,
+    consumer_id: str,
     prosumer: bool,
     feeder_uptime_pct: float | None,
     pmt_loss_rank: float | None,
     pmt_residual_kwh: float | None,
     peer_deviation: float | None,
     has_ami: bool,
-) -> list[Safeguard]:
+) -> tuple[list[Safeguard], bool, bool]:
     uptime_ok = feeder_uptime_pct is None or feeder_uptime_pct >= 80.0
     residual_present = (pmt_loss_rank is not None and pmt_loss_rank >= 0.6) or (
         pmt_residual_kwh is not None and pmt_residual_kwh > 0
     )
     legit_low = peer_deviation is not None and peer_deviation < -2.5
-    return [
+    is_dup = case_dedup_guard(consumer_id)
+    is_repeat = recidivism_checker(consumer_id)
+
+    guards = [
         Safeguard(
             "sg-1", "Registered Solar Prosumer", passed=not prosumer,
             detail="No solar export on file." if not prosumer
@@ -179,7 +257,13 @@ def _safeguards(
             "sg-6", "Field Verification Required", passed=True,
             detail="Mandatory before any operational or administrative action.",
         ),
+        Safeguard(
+            "sg-7", "Case Deduplication Guard", passed=not is_dup,
+            detail="No active duplicate alert within recent inspection window." if not is_dup
+            else "Consumer already under active investigation — deduplicated.",
+        ),
     ]
+    return guards, is_repeat, is_dup
 
 
 def _analyst_summary(score: RiskScore, consumer: dict, top) -> str:
