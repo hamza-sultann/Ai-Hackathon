@@ -27,8 +27,18 @@ apiClient.interceptors.response.use(
 
 export async function fetchWithMockFallback<T>(
   realApiCall: () => Promise<T>,
-  _mockApiCall?: () => Promise<T>
+  mockApiCall?: () => Promise<T>
 ): Promise<T> {
-  return await realApiCall();
+  if (USE_MOCK_API && mockApiCall) {
+    return mockApiCall();
+  }
+  try {
+    return await realApiCall();
+  } catch (err) {
+    if (mockApiCall) {
+      return mockApiCall();
+    }
+    throw err;
+  }
 }
 
