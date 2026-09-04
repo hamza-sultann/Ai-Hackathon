@@ -4,10 +4,14 @@ export const API_ENDPOINTS = {
 
   // Admin
   ADMIN_DATA_SOURCES: '/admin/data-sources',
+  ADMIN_SYNC_DATA_SOURCE: (sourceId: string) => `/admin/data-sources/${sourceId}/sync`,
   ADMIN_MODEL_SERVICES: '/admin/model-services',
+  ADMIN_TEST_MODEL: (modelId: string) => `/admin/model-services/${modelId}/test`,
   ADMIN_AUDIT: '/admin/audit',
   ADMIN_HEALTH: '/admin/system-health',
   ADMIN_USERS: '/admin/users',
+  ADMIN_CONFIG: '/admin/config',
+  ADMIN_NOTIFICATIONS: '/admin/notifications',
 
   // Analyses
   ANALYSES: '/analyses',
@@ -19,7 +23,9 @@ export const API_ENDPOINTS = {
   // Field
   FIELD_OVERVIEW: '/field/overview',
   FIELD_JOBS: '/field/jobs',
+  FIELD_SQUADS: '/field/squads',
   FIELD_TEAM: '/field/team',
+  FIELD_HISTORY: '/field/history',
   JOB_CARD_FINDINGS: (jobCardId: string) => `/field/jobs/${jobCardId}/findings`,
 
   // Grid
@@ -33,10 +39,13 @@ export const API_ENDPOINTS = {
   INVESTIGATIONS: '/investigations',
   INVESTIGATION_DETAIL: (consumerId: string) => `/investigations/${consumerId}`,
   INVESTIGATION_EXPLANATION: (consumerId: string) => `/investigations/${consumerId}/explanation`,
+  INVESTIGATION_MONTHLY: (consumerId: string) => `/investigations/${consumerId}/monthly`,
+  INVESTIGATION_HOURLY: (consumerId: string) => `/investigations/${consumerId}/hourly`,
 
   // Job Cards
   JOB_CARDS: '/job-cards',
   JOB_CARD_DETAIL: (id: string) => `/job-cards/${id}`,
   JOB_CARD_ASSIGN: (id: string) => `/job-cards/${id}`,
 } as const;
+
 

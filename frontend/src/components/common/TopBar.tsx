@@ -407,13 +407,14 @@ export const TopBar: React.FC<TopBarProps> = ({
                   <button
                     onClick={() => {
                       setProfileOpen(false);
-                      showToast('Session refreshed in prototype mode.');
+                      showToast('Connected to live FastAPI backend (http://localhost:8000/api).');
                     }}
                     className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-[#9BA8A0] hover:text-[#F3F7F4] hover:bg-[#161D19] transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#40D9E8]" />
-                    <span>Prototype Environment Info</span>
+                    <span>Live Backend Environment</span>
                   </button>
+
 
                   <button
                     onClick={() => {
