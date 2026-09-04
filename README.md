@@ -5,7 +5,10 @@ An end-to-end machine learning pipeline that detects non-technical loss (theft, 
 Built specifically for grid architectures that rely on monthly manual billing and PMT/feeder totalizer readings, this system identifies anomalies without requiring a smart-meter rollout. 
 
 > [!NOTE]
-> **Full Stack Integration**: For a comprehensive architectural overview, branch topology, test verification results, and multi-agent enhancements, see [INTEGRATION_WALKTHROUGH.md](INTEGRATION_WALKTHROUGH.md).
+> **Integration & Architecture Documents**:
+> - [INTEGRATION_WALKTHROUGH.md](INTEGRATION_WALKTHROUGH.md) — Unified stack integration overview, verification report, and test results.
+> - [AGENTIC_INTEGRATION_ISSUES.md](AGENTIC_INTEGRATION_ISSUES.md) — Technical audit of agentic layer disconnects (confounders, deduplication, Urdu alerts).
+> - [FULL_SYSTEM_DISCONNECTIONS.md](FULL_SYSTEM_DISCONNECTIONS.md) — Technical audit of non-agentic disconnects (51.8M AMI telemetry, model leakage, mock endpoints, feedback loops).
 
 ## 🧠 How It Works
 This project uses a stacked two-model architecture:
