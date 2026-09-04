@@ -412,7 +412,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 model-layer-build-plan.md
-track2-interval-design-and-build-plan.md
 interval_readings.csv
 interval_readings.parquet
 test_intervals.csv

@@ -230,3 +230,111 @@ Honest Consumer FPR:     2.77%  ──────►  2.73%   (Stable false ala
 1. **SCADA / AMI Integration:** Ingests hourly JSON/Parquet payloads from smart meter collectors.
 2. **Real-Time Priority Queue:** Ranks all consumers daily by expected recoverable revenue ($\text{Recoverable PKR} = P_{\text{theft}} \times \text{Deficit kWh} \times \text{Tariff Rate}$).
 3. **Bandwidth Optimization:** Proves that **1-hour sampling** captures >90% of maximum possible theft signals while cutting cellular telecom transmission costs by **75%** compared to 15-minute polling.
+
+---
+
+## 6. How to Run Track 1 and Track 2 Separately
+
+All commands are executed from the repository root (`Ai-Hackathon`).
+
+### 6.1 Running Track 1 (Monthly Billing Legacy Pipeline)
+Track 1 processes the 10,000-consumer grid using monthly billing records, transformer energy balances, CUSUM break detection, and Platt-calibrated XGBoost.
+
+```bash
+# Step 1: Ingest CSVs, join PMT/Feeder hierarchy, and perform leakage-free stratified split
+python data_assembly.py
+# Outputs: output/train.parquet (60%), output/calibrate.parquet (20%), output/eval.parquet (20%)
+
+# Step 2: Execute the full Track 1 ML Pipeline end-to-end
+python run_pipeline.py
+# Executes:
+#   1. Feature engineering (CUSUM, fixed 3-month anchor, PMT loss rank, prosumer gate)
+#   2. 5-Fold GroupKFold Out-of-Fold Isolation Forest anomaly scoring
+#   3. XGBoost training with scale_pos_weight = 11.5
+#   4. Platt probability calibration via FrozenEstimator
+#   5. TreeSHAP explanation extraction & sample field raid docket generation
+#   6. Full evaluation report across all 14 archetypes (Precision: 69.7%, Recall: 30.6%)
+
+# (Optional) Run the diagnostic benchmark before vs after fixes:
+python diagnose.py
+```
+
+### 6.2 Running Track 2 (High-Frequency Smart Meter AMI Pipeline)
+Track 2 simulates the 1-hour interval smart grid for the 2,000 residential pilot population, streams 51.8M readings to Parquet, extracts scale-invariant shape features, and benchmarks the uplift against Track 1.
+
+```bash
+# Step 1: Select and flag the 2,000 residential AMI pilot population
+python select_ami_population.py
+# Updates data/consumers.csv with has_ami=True and outputs ami_consumer_ids.csv
+
+# Step 2: Generate 51.8 Million 1-hour interval readings (streaming Parquet)
+python generate_intervals.py
+# Disaggregates monthly totals into 24-hour diurnal curves, injects AC cycling,
+# geyser spikes, solar duck curves, and time-of-use peak theft.
+# Output: interval_readings.parquet (~307.5 MB, 51,819,270 rows)
+# Runtime: ~6 minutes on standard CPU
+
+# Step 3: Stream-extract the 7 load curve features in batches (Memory-Safe)
+python run_track2_features.py
+# Reads Parquet in 500k-row chunks (Peak RAM < 200 MB)
+# Outputs: track2_features.csv (~5 MB, 72,000 consumer-months)
+# Runtime: ~5.5 minutes
+
+# Step 4: Run the Smart Grid Uplift Evaluation Benchmark
+python uplift_evaluation.py
+# Performs controlled ablation: Model 1 (Monthly Only) vs. Model 2 (Monthly + 1-Hour Features)
+# on the exact same AMI consumers, outputting the side-by-side uplift proof table.
+# Runtime: ~10 seconds
+```
+
+### 6.3 Running Automated Unit & Integration Tests
+```bash
+pytest test_rewdp_templates.py test_generate_intervals.py test_features.py test_calibrate.py test_iso.py test_merge.py test_train.py -v
+```
+**Result:** 34 passed in ~2.6s (100% test coverage across physics, generators, and models).
+
+---
+
+## 7. Visual Component Designs
+
+### Track 1 Pipeline Design (Monthly Macro-Dynamics)
+```
+  [ consumers.csv ] + [ monthly_readings.csv ] + [ pmt_monthly.csv ]
+                           │
+                           ▼ (data_assembly.py)
+            [ 60/20/20 Stratified Split by Consumer ]
+                           │
+                           ▼ (features.py)
+            [ CUSUM Break Detection + PMT Loss Rank ]
+                           │
+                           ▼ (isolation_forest_oof.py)
+            [ 5-Fold GroupKFold Anomaly Score ]
+                           │
+                           ▼ (train_xgboost.py)
+            [ XGBoost with Asymmetric Cost Weighting ]
+                           │
+                           ▼ (calibrate.py)
+            [ Platt Calibration via FrozenEstimator ]
+                           │
+                           ▼ (evaluate.py + explain.py)
+            [ Precision: 69.7% | Solar False Alarms: 0.00% ]
+```
+
+### Track 2 Pipeline Design (High-Frequency Micro-Dynamics)
+```
+  [ consumers.csv (has_ami=True) ] + [ Monthly Totals ]
+                           │
+                           ▼ (generate_intervals.py)
+     [ Diurnal Engine + Confounders + Time-Targeted Theft ]
+                           │
+                           ▼ (PyArrow Parquet Streaming Writer)
+     [ interval_readings.parquet (51.8M Rows, 307 MB) ]
+                           │
+                           ▼ (run_track2_features.py - 500k Chunk Batches)
+     [ track2_features.csv (72,000 Rows, 5 MB) ]
+                           │
+                           ▼ (uplift_evaluation.py)
+     [ Side-by-Side Controlled Ablation Benchmark ]
+     [ Peak Shaver Recall: 10.6% ──► 58.3% (+47.8% Uplift) ]
+```
+
