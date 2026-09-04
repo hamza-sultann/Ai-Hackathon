@@ -26,7 +26,7 @@ These range from **51.8 million real hourly smart-meter readings being completel
 | **6** | **Model Training & Evaluation Data Leakage** | `run_pipeline.py` cleanly separates `train.parquet`, `calibrate.parquet`, and `eval.parquet`. | `backend/app/ml/scorer.py` trains on the **entire 360,000-row panel including the test month**, resulting in train/test target leakage. | **HIGH** |
 | **7** | **Admin Live Inference Test Modal** | `AdminModelsPage.tsx` provides interactive sliders for load drop, off-peak ratio, PMT residual, etc. | `POST /api/admin/model-services/{id}/test` ignores user inputs and returns **hardcoded `0.912` and `"91.2%"`**. | **MEDIUM** |
 | **8** | **Admin System Configuration Persistence** | `AdminConfigPage.tsx` allows admins to tune risk thresholds, SLA hours, and PMT loss limits. | `PATCH /api/admin/config` merely echos the request back without saving to SQLite, JSON, or modifying backend thresholds. | **MEDIUM** |
-| **9** | **Field Inspection Outcome Feedback Loop** | Field squads record meter seals, bypasses, and tampering outcomes (`POST /api/field/jobs/{id}/findings`). | Findings are stored in SQLite but **never feed back into ML ground truth**, active learning, or false-positive suppression. | **HIGH** |
+
 
 ---
 
@@ -172,15 +172,6 @@ These range from **51.8 million real hourly smart-meter readings being completel
   - It does NOT track the model's actual precision on inspected cases.
   - It does NOT trigger model calibration adjustments.
 - **Impact**: The system is an open loop. The AI makes recommendations, but never learns from whether field inspectors confirmed or debunked its findings.
-
----
-
-### Disconnection 9: Standalone Diagnostic Tools are Orphaned from the Web UI
-- **The Ground Reality**: The repository contains sophisticated evaluation scripts:
-  - `diagnose.py`: Computes Brier score, Expected Calibration Error (ECE), and PR-AUC.
-  - `evaluate.py`: Generates full confusion matrices and revenue recovery curves.
-  - `uplift_evaluation.py`: Quantifies exact theft capture uplift from smart meters.
-- **The Disconnect**: None of these capabilities are accessible from the FastAPI backend or the React dashboard. The frontend Admin and Analyst dashboards show static metrics instead of dynamically rendering real model calibration curves (`output/reliability_curve.png`).
 
 ---
 
