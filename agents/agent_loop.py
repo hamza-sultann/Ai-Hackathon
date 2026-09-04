@@ -81,9 +81,9 @@ def main():
     # Use the calibrated model to get probabilities
     eval_df['calibrated_probability'] = calibrator.predict_proba(X_eval_model_features)[:, 1]
 
-    print("Identifying high-probability consumers (threshold 0.75)...")
-    high_prob_df = eval_df[eval_df['calibrated_probability'] > 0.75].copy()
-    print(f"Found {len(high_prob_df)} consumers exceeding the 0.75 threshold.")
+    print("Identifying high-probability consumers (threshold 0.65)...")
+    high_prob_df = eval_df[eval_df['calibrated_probability'] > 0.65].copy()
+    print(f"Found {len(high_prob_df)} consumers exceeding the 0.65 threshold.")
 
     if high_prob_df.empty:
         print("No consumers met the threshold. Exiting.")
