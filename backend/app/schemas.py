@@ -103,6 +103,8 @@ class RiskExplanation(CamelModel):
     tree_shap_contributions: list[ShapFeatureContribution]
     pmt_corroboration_text: str
     safeguards: list[SafeguardCheck]
+    field_alert: Optional[str] = None
+    field_alert_urdu: Optional[str] = None
 
 
 class MonthlyReading(CamelModel):

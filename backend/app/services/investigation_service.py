@@ -133,7 +133,7 @@ def get_explanation(consumer_id: str) -> RiskExplanation | None:
     score = get_scorer().explain(consumer_id)
     if score is None:
         return None
-    dispatch = _dispatch_for(consumer_id, score, consumer, ctx)
+    dispatch = _dispatch_for(consumer_id, score, consumer, ctx, include_urdu=True)
 
     contributions = []
     for c in score.contributions[:6]:
@@ -157,6 +157,8 @@ def get_explanation(consumer_id: str) -> RiskExplanation | None:
             SafeguardCheck(id=s.id, name=s.name, passed=s.passed, detail=s.detail)
             for s in dispatch.safeguards
         ],
+        field_alert=dispatch.field_alert,
+        field_alert_urdu=dispatch.field_alert_urdu,
     )
 
 
@@ -250,7 +252,7 @@ def get_hourly_readings(consumer_id: str) -> list[HourlyReading] | None:
 # ---------------------------------------------------------------------------
 # internals
 # ---------------------------------------------------------------------------
-def _dispatch_for(consumer_id: str, score: RiskScore, consumer: dict, ctx) -> DispatchResult:
+def _dispatch_for(consumer_id: str, score: RiskScore, consumer: dict, ctx, include_urdu: bool = False) -> DispatchResult:
     sub = get_scorer().scored_for(consumer_id)
     frow = sub[sub["month"] == ctx.month]
     frow = frow.iloc[0] if not frow.empty else None
@@ -270,6 +272,7 @@ def _dispatch_for(consumer_id: str, score: RiskScore, consumer: dict, ctx) -> Di
         pmt_loss_rank=pmt_loss_rank,
         pmt_residual_kwh=residual,
         peer_deviation=peer_dev,
+        include_urdu=include_urdu,
     )
 
 

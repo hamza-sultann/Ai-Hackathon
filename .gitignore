@@ -415,6 +415,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+audit_log.jsonl
+temp_*.json
 model-layer-build-plan.md
 track2-interval-design-and-build-plan.md
 interval_readings.csv

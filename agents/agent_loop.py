@@ -1,6 +1,11 @@
-# agents/agent_loop.py
+import sys
+from pathlib import Path
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 import pandas as pd
 import numpy as np
@@ -81,9 +86,11 @@ def main():
     # Use the calibrated model to get probabilities
     eval_df['calibrated_probability'] = calibrator.predict_proba(X_eval_model_features)[:, 1]
 
-    print("Identifying high-probability consumers (threshold 0.75)...")
-    high_prob_df = eval_df[eval_df['calibrated_probability'] > 0.75].copy()
-    print(f"Found {len(high_prob_df)} consumers exceeding the 0.75 threshold.")
+    from agents.agent_dispatcher import seasonal_agent
+    threshold = seasonal_agent(0.65)
+    print(f"Identifying high-probability consumers (threshold {threshold:.2f})...")
+    high_prob_df = eval_df[eval_df['calibrated_probability'] >= threshold].copy()
+    print(f"Found {len(high_prob_df)} consumers meeting the {threshold:.2f} threshold.")
 
     if high_prob_df.empty:
         print("No consumers met the threshold. Exiting.")

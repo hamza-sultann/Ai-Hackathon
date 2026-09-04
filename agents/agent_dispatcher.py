@@ -1,11 +1,12 @@
-# agent_dispatcher.py
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import pandas as pd
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from deep_translator import GoogleTranslator
 import os
-from datetime import datetime, timezone, timedelta
 
 def check_confound(consumer_id, prosumer_status, uptime_pct, calibrated_probability):
     """

@@ -19,8 +19,52 @@ To ensure innocent consumers aren't wrongfully flagged, the pipeline explicitly 
 No flag reaches a field inspector without a reason. The pipeline uses **TreeSHAP** to attach exact, human-readable explanations to every alert (e.g., *"Usage dropped 60% vs. expected baseline while feeder-level loss rose 18% this month."*).
 
 ## 🚀 Getting Started
-To generate the synthetic dataset and run the pipeline locally:
-1. Clone this repository.
-2. Run the data generation script to build the core tables (`consumers.csv`, `feeder_monthly.csv`, and `monthly_readings.csv`):
-   ```bash
-   python generate_data.py
+
+### 1. Environment Setup
+
+```bash
+# Python dependencies
+pip install -r backend/requirements.txt
+pip install xgboost shap pytest deep-translator
+
+# Frontend dependencies
+cd frontend
+npm install --legacy-peer-deps
+cd ..
+```
+
+### 2. Machine Learning Pipeline & Agentic Layer
+
+Run the full end-to-end model pipeline (data assembly, feature engineering, Isolation Forest, XGBoost, probability calibration, and SHAP explanations):
+```bash
+python run_pipeline.py
+```
+
+Trigger the multi-agent decision loop (confound checks, seasonal adjustment, deduplication, Urdu localized field alerts, and audit logging):
+```bash
+python agents/agent_loop.py
+```
+
+### 3. FastAPI Backend
+
+Start the backend API server (runs on `http://localhost:8000` with interactive docs at `/docs`):
+```bash
+cd backend
+python run.py
+```
+Or run the automated backend smoke test suite:
+```bash
+python scripts/smoke.py
+```
+
+### 4. React Frontend
+
+Start the Vite development server (runs on `http://localhost:5173`):
+```bash
+cd frontend
+npm run dev
+```
+To create a production build:
+```bash
+npm run build
+```

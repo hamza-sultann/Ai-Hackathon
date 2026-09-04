@@ -31,8 +31,15 @@ def _resolve(path_str: str) -> Path:
 
 class Settings:
     def __init__(self) -> None:
-        self.backend_root: Path = _BACKEND_ROOT
-        self.data_dir: Path = _resolve(os.environ.get("ISTIKSHAF_DATA_DIR", "./data"))
+        data_env = os.environ.get("ISTIKSHAF_DATA_DIR")
+        if data_env:
+            self.data_dir = _resolve(data_env)
+        elif (_BACKEND_ROOT / "data" / "consumers.csv").exists():
+            self.data_dir = _BACKEND_ROOT / "data"
+        elif (_BACKEND_ROOT.parent / "data" / "consumers.csv").exists():
+            self.data_dir = _BACKEND_ROOT.parent / "data"
+        else:
+            self.data_dir = _BACKEND_ROOT / "data"
         self.cache_dir: Path = _resolve(os.environ.get("ISTIKSHAF_CACHE_DIR", "./.cache"))
         self.allowed_origins: list[str] = [
             o.strip()

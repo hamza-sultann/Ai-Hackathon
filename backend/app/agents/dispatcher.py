@@ -31,6 +31,7 @@ class DispatchResult:
     safeguards: list[Safeguard] = field(default_factory=list)
     analyst_summary: str = ""
     field_alert: str = ""
+    field_alert_urdu: str = ""
     pmt_corroboration: str = ""
     cancelled: bool = False
 
@@ -43,6 +44,7 @@ def run_dispatch(
     pmt_loss_rank: float | None,
     pmt_residual_kwh: float | None,
     peer_deviation: float | None,
+    include_urdu: bool = False,
 ) -> DispatchResult:
     cid = score.consumer_id
     prob = score.probability
@@ -92,6 +94,7 @@ def run_dispatch(
 
     analyst_summary = _analyst_summary(score, consumer, top)
     pmt_text = _pmt_corroboration(pmt_loss_rank, pmt_residual_kwh)
+    urdu_alert = urdu_localization_agent(field_alert) if (include_urdu and field_alert) else ""
 
     return DispatchResult(
         consumer_id=cid,
@@ -100,8 +103,26 @@ def run_dispatch(
         safeguards=safeguards,
         analyst_summary=analyst_summary,
         field_alert=field_alert,
+        field_alert_urdu=urdu_alert,
         pmt_corroboration=pmt_text,
     )
+
+
+import functools
+
+@functools.lru_cache(maxsize=128)
+def urdu_localization_agent(text_in_english: str) -> str:
+    """Translates the English alert into Urdu for field crews."""
+    if not text_in_english:
+        return ""
+    try:
+        from deep_translator import GoogleTranslator
+        return GoogleTranslator(source="en", target="ur").translate(text_in_english)
+    except Exception:
+        # Graceful fallback in offline / network failure scenarios
+        if "ATTENTION" in text_in_english:
+            return "توجہ فرمائیں: صارف میں ممکنہ بے ضابطگی پائی گئی ہے۔ براہ کرم کنکشن کی جانچ کریں۔"
+        return "ترجیحی معائنہ: صارف کے میٹر اور کنکشن کی سائٹ پر فوری جانچ درکار ہے۔"
 
 
 def audit_record(result: DispatchResult) -> dict:
