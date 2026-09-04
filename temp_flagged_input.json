@@ -1,0 +1,1 @@
+{"consumer_id": "C-001753", "shap_values": {"cusum_max_deviation": 1.2258914709091187, "fixed_baseline_deviation": 1.1201603412628174, "prosumer_gated_usage_deviation": 0.3032611608505249}, "raw_features": {"cusum_max_deviation": 1.6584097074156334, "fixed_baseline_deviation": -0.3228200183747437, "prosumer_gated_usage_deviation": -0.3015404694301166}}

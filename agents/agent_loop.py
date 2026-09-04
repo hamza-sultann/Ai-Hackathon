@@ -92,6 +92,7 @@ def main():
     high_prob_df = eval_df[eval_df['calibrated_probability'] >= threshold].copy()
     print(f"Found {len(high_prob_df)} consumers meeting the {threshold:.2f} threshold.")
 
+
     if high_prob_df.empty:
         print("No consumers met the threshold. Exiting.")
         return
