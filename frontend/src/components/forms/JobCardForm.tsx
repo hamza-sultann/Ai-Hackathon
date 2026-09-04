@@ -95,6 +95,9 @@ export const JobCardForm: React.FC<JobCardFormProps> = ({
       analystNotes: data.analystNotes,
       assignedTeam: data.assignedTeam,
       scheduledDate: data.scheduledDate,
+      // Agent-generated, not user-edited — carried straight from the investigation.
+      fieldAlert: initialData?.fieldAlert,
+      fieldAlertUrdu: initialData?.fieldAlertUrdu,
     };
 
     onSubmit(payload);
@@ -173,6 +176,20 @@ export const JobCardForm: React.FC<JobCardFormProps> = ({
         />
         {errors.evidenceSummary && <span className="text-[11px] text-[#FF6262]">{errors.evidenceSummary.message}</span>}
       </div>
+
+      {(initialData?.fieldAlert || initialData?.fieldAlertUrdu) && (
+        <div className="p-3 bg-[#161D19] border border-[#263129] rounded-lg text-xs space-y-2">
+          <span className="font-semibold text-[#F3F7F4] block">
+            Bilingual Field Alert (attached automatically, not editable here)
+          </span>
+          {initialData?.fieldAlert && <p className="text-[#9BA8A0]">{initialData.fieldAlert}</p>}
+          {initialData?.fieldAlertUrdu && (
+            <p dir="rtl" lang="ur" className="text-[#F5B942] text-right">
+              {initialData.fieldAlertUrdu}
+            </p>
+          )}
+        </div>
+      )}
 
       <div>
         <label className="block text-xs font-semibold text-[#9BA8A0] mb-1">Recommended Physical Checks (One per line)</label>

@@ -58,6 +58,8 @@ def _seed_job_cards(n: int = 6) -> None:
             scheduled_date=(now + timedelta(days=1 + i)).strftime("%Y-%m-%d"),
             status="Assigned",
             created_at=(now - timedelta(hours=i)).strftime("%Y-%m-%d %H:%M PKT"),
+            field_alert=explanation.field_alert if explanation else None,
+            field_alert_urdu=explanation.field_alert_urdu if explanation else None,
         )
         upsert_job_card(card.model_dump(by_alias=True))
     log.info("Seeded %d job cards", len(investigations))

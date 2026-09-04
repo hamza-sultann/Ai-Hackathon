@@ -209,9 +209,47 @@ export const AnalysisDrawer: React.FC<AnalysisDrawerProps> = ({
               </div>
 
               {activeJob.status === 'completed' && (
-                <div className="p-4 rounded-lg bg-[#63D98A]/10 border border-[#63D98A]/30 text-xs text-[#63D98A] flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 shrink-0" />
-                  <span>Analysis batch successfully completed! Operational risk scores & TreeSHAP explanations refreshed.</span>
+                <div className="space-y-3">
+                  <div className="p-4 rounded-lg bg-[#63D98A]/10 border border-[#63D98A]/30 text-xs text-[#63D98A] flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 shrink-0" />
+                    <span>Analysis batch successfully completed! Operational risk scores &amp; TreeSHAP explanations refreshed.</span>
+                  </div>
+
+                  {(activeJob.flaggedCount != null || activeJob.agentDecisions) && (
+                    <div className="p-4 rounded-xl bg-[#101512] border border-[#263129] space-y-2 text-xs text-[#9BA8A0]">
+                      <span className="font-semibold text-[#F3F7F4] uppercase tracking-wider block">
+                        Pipeline Result
+                      </span>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono-tech">
+                        {activeJob.modelScored && (
+                          <><span>Model</span><span className="text-[#F3F7F4]">{activeJob.modelScored}</span></>
+                        )}
+                        {activeJob.analysisMonth && (
+                          <><span>Analysis month</span><span className="text-[#F3F7F4]">{activeJob.analysisMonth}</span></>
+                        )}
+                        {activeJob.flaggedCount != null && (
+                          <><span>Consumers flagged</span><span className="text-[#F5B942]">{activeJob.flaggedCount}</span></>
+                        )}
+                        {activeJob.agentDecisions && (
+                          <>
+                            <span>Routed to field</span>
+                            <span className="text-[#F3F7F4]">{activeJob.agentDecisions.routedToField}</span>
+                            <span>Soft-warning SMS</span>
+                            <span className="text-[#F3F7F4]">{activeJob.agentDecisions.softWarning}</span>
+                            <span>Suppressed (Confounder)</span>
+                            <span className="text-[#F3F7F4]">{activeJob.agentDecisions.suppressedConfounder}</span>
+                            <span>Consolidated (dedup)</span>
+                            <span className="text-[#F3F7F4]">{activeJob.agentDecisions.consolidatedDuplicate}</span>
+                            <span>Repeat-offender flags</span>
+                            <span className="text-[#F3F7F4]">{activeJob.agentDecisions.recidivist}</span>
+                          </>
+                        )}
+                        {activeJob.auditEventsWritten != null && (
+                          <><span>Audit events written</span><span className="text-[#F3F7F4]">{activeJob.auditEventsWritten}</span></>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

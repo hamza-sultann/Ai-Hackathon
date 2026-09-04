@@ -102,6 +102,22 @@ export const FieldJobDetailPage: React.FC = () => {
           </span>
           <p className="font-mono-tech text-[#F3F7F4]">{jobCard.evidenceSummary}</p>
         </div>
+
+        {jobCard.fieldAlertUrdu && (
+          <div className="p-4 bg-[#0C110E] border border-[#F5B942]/30 rounded-xl text-xs space-y-2">
+            <span className="font-bold text-[#F5B942] block uppercase tracking-wider">
+              فیلڈ وارننگ (اردو)
+            </span>
+            <p dir="rtl" lang="ur" className="text-base leading-loose text-right text-[#F3F7F4]">
+              {jobCard.fieldAlertUrdu}
+            </p>
+            {jobCard.fieldAlert && (
+              <p className="font-mono-tech text-[#9BA8A0] pt-2 border-t border-[#263129]">
+                {jobCard.fieldAlert}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Inspection Findings Submission Form */}

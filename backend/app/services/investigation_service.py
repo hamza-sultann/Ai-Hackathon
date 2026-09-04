@@ -25,6 +25,13 @@ from app.services.metrics import context, split_gap
 MAX_QUEUE = 200
 PEAK_HOURS = {18, 19, 20, 21}
 
+# Priority / strength tiers on the *calibrated* probability scale. The real
+# Track-1 XGBoost calibrator compresses probabilities (observed max ~0.73, true-
+# theft consumers cluster ~0.48-0.73), so these sit lower than raw-classifier
+# intuition. 0.50 is the operating point run_pipeline.py evaluates at.
+HIGH_TIER = 0.62
+MEDIUM_TIER = 0.50
+
 FEATURE_LABELS: dict[str, str] = {
     "pmt_loss_delta_pct": "PMT Unaccounted-Energy Gap",
     "pmt_loss_rank": "PMT Loss Percentile Rank",
@@ -287,11 +294,11 @@ def _estimated_impact(consumer_id: str, ctx) -> float:
 
 
 def _priority(prob: float) -> str:
-    return "High" if prob >= 0.75 else "Medium" if prob >= 0.62 else "Low"
+    return "High" if prob >= HIGH_TIER else "Medium" if prob >= MEDIUM_TIER else "Low"
 
 
 def _strength(prob: float) -> str:
-    return "Strong" if prob >= 0.75 else "Moderate" if prob >= 0.62 else "Weak"
+    return "Strong" if prob >= HIGH_TIER else "Moderate" if prob >= MEDIUM_TIER else "Weak"
 
 
 def _evidence_source(score: RiskScore) -> str:

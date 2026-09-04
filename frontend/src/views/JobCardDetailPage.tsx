@@ -146,6 +146,24 @@ export const JobCardDetailPage: React.FC = () => {
               {jobCard.relevantPeriodsText}
             </p>
           </div>
+
+          {(jobCard.fieldAlert || jobCard.fieldAlertUrdu) && (
+            <div>
+              <h3 className="text-xs font-bold text-[#9BA8A0] uppercase tracking-wider mb-1">
+                Field Alert (English / اردو)
+              </h3>
+              <div className="p-4 bg-[#0C110E] border border-[#263129] rounded-xl text-xs space-y-2">
+                {jobCard.fieldAlert && (
+                  <p className="font-mono-tech text-[#F3F7F4]">{jobCard.fieldAlert}</p>
+                )}
+                {jobCard.fieldAlertUrdu && (
+                  <p dir="rtl" lang="ur" className="text-sm leading-loose text-right text-[#F3F7F4] pt-2 border-t border-[#263129]">
+                    {jobCard.fieldAlertUrdu}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Section 4: Recommended Physical Checks */}

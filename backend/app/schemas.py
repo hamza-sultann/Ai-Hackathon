@@ -181,6 +181,15 @@ AnalysisStatus = Literal[
 ]
 
 
+class AgentDecisionCounts(CamelModel):
+    flagged: int = 0
+    suppressed_confounder: int = 0
+    consolidated_duplicate: int = 0
+    soft_warning: int = 0
+    routed_to_field: int = 0
+    recidivist: int = 0
+
+
 class AnalysisJob(CamelModel):
     id: str
     status: AnalysisStatus
@@ -191,6 +200,12 @@ class AnalysisJob(CamelModel):
     created_at: str
     completed_at: Optional[str] = None
     error_message: Optional[str] = None
+    # Populated once the real pipeline finishes.
+    model_scored: Optional[str] = None
+    flagged_count: Optional[int] = None
+    agent_decisions: Optional[AgentDecisionCounts] = None
+    audit_events_written: Optional[int] = None
+    analysis_month: Optional[str] = None
 
 
 class StartAnalysisRequest(CamelModel):
@@ -226,6 +241,9 @@ class JobCard(CamelModel):
     scheduled_date: str
     status: JobCardStatus
     created_at: str
+    # Bilingual field alert carried from the investigation's Urdu localization agent.
+    field_alert: Optional[str] = None
+    field_alert_urdu: Optional[str] = None
 
 
 class CreateJobCardRequest(CamelModel):
@@ -243,6 +261,8 @@ class CreateJobCardRequest(CamelModel):
     analyst_notes: str
     assigned_team: str
     scheduled_date: str
+    field_alert: Optional[str] = None
+    field_alert_urdu: Optional[str] = None
 
 
 class UpdateJobCardStatusRequest(CamelModel):

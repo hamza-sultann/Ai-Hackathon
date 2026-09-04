@@ -427,4 +427,6 @@ shape_templates.pkl
 ami_consumer_ids.csv
 *.joblib
 xgboost_model.json
+xgboost_model_track2.json
+ami_consumer_ids.csv
 output/

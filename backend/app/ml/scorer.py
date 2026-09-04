@@ -55,8 +55,36 @@ class RiskScore:
 
 
 @functools.lru_cache(maxsize=1)
-def get_scorer() -> "RiskScorer":
+def get_scorer():
+    """Return the active risk scorer.
+
+    Serves the real XGBoost + TreeSHAP pipeline (`xgb_scorer.XGBRiskScorer`) when
+    its artifacts + deps are present; otherwise the dependency-light scikit-learn
+    reproduction below. Controlled by `ISTIKSHAF_SCORER` (auto | on | off).
+    """
+    backend = get_settings().scorer_backend
+    if backend == "off":
+        log.info("ISTIKSHAF_SCORER=off — using scikit-learn fallback scorer.")
+        return RiskScorer()
+
+    from app.ml.xgb_scorer import XGBRiskScorer, XGBUnavailable, artifacts_available
+
+    if backend == "on" or artifacts_available():
+        try:
+            scorer = XGBRiskScorer()
+            log.info("Serving the real XGBoost + TreeSHAP pipeline.")
+            return scorer
+        except XGBUnavailable as exc:
+            if backend == "on":
+                raise
+            log.warning("XGBoost pipeline unavailable (%s) — falling back to scikit-learn.", exc)
+
     return RiskScorer()
+
+
+def reset_scorer() -> None:
+    """Drop the cached scorer so the next `get_scorer()` rebuilds and re-scores."""
+    get_scorer.cache_clear()
 
 
 class RiskScorer:

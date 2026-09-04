@@ -7,11 +7,10 @@ narratives the frontend renders.
 """
 from __future__ import annotations
 
-import json
-import os
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 
+from app import db
 from app.ml.scorer import RiskScore
 
 SOFT_WARNING_BAND = (0.65, 0.70)
@@ -159,52 +158,42 @@ def audit_record(result: DispatchResult) -> dict:
     }
 
 
-def _find_audit_log() -> str | None:
-    for path in ("audit_log.jsonl", "../audit_log.jsonl", "backend/audit_log.jsonl"):
-        if os.path.exists(path):
-            return path
-    return None
+def _parse_audit_timestamp(ts: str | None) -> datetime | None:
+    """Audit events are stamped '%Y-%m-%d %H:%M PKT' (see routers/*.py,
+    services/analysis_jobs.py) — minute precision, naive local time."""
+    if not ts:
+        return None
+    try:
+        return datetime.strptime(ts.removesuffix(" PKT"), "%Y-%m-%d %H:%M")
+    except ValueError:
+        return None
 
 
 def recidivism_checker(consumer_id: str) -> bool:
-    """Checks if the consumer has been flagged before in our own log."""
-    log_path = _find_audit_log()
-    if not log_path:
-        return False
-    flag_count = 0
+    """Checks if the consumer has been flagged before, via the live SQLite
+    audit trail — the same store the Admin Audit screen reads and the real
+    analysis pipeline (services/analysis_jobs.py) writes to. Previously read
+    a separate, frozen CLI-era audit_log.jsonl that the live pipeline never
+    wrote to, so this safeguard could never see its own history."""
     try:
-        with open(log_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if not line.strip():
-                    continue
-                record = json.loads(line)
-                if record.get("consumer_id") == consumer_id:
-                    flag_count += 1
+        events = db.list_audit_events_for_object(consumer_id)
     except Exception:
         return False
-    return flag_count > 1
+    return len(events) > 1
 
 
 def case_dedup_guard(consumer_id: str) -> bool:
-    """Checks if the consumer has been recently alerted (within 1 min demo mode)."""
-    log_path = _find_audit_log()
-    if not log_path:
-        return False
-    now = datetime.now(timezone.utc)
+    """Checks if the consumer has been alerted within the last minute (demo
+    mode) via the live SQLite audit trail — see recidivism_checker above."""
     try:
-        with open(log_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if not line.strip():
-                    continue
-                record = json.loads(line)
-                if record.get("consumer_id") == consumer_id:
-                    ts = record.get("timestamp")
-                    if ts:
-                        log_time = datetime.fromisoformat(ts)
-                        if now - log_time < timedelta(minutes=1):
-                            return True
+        events = db.list_audit_events_for_object(consumer_id)
     except Exception:
         return False
+    now = datetime.now()
+    for record in events:
+        ts = _parse_audit_timestamp(record.get("timestamp"))
+        if ts is not None and now - ts < timedelta(minutes=1):
+            return True
     return False
 
 

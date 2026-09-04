@@ -112,6 +112,19 @@ def list_audit_events(limit: int = 100) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def list_audit_events_for_object(object_id: str, limit: int = 200) -> list[dict]:
+    """All audit events recorded against one object (e.g. a consumer_id) —
+    used by the agentic layer's dedup/recidivism safeguards so they see the
+    live pipeline's own history instead of a separate log."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT id, actor, timestamp, action, object_id AS objectId, result "
+            "FROM audit_events WHERE object_id = ? ORDER BY timestamp DESC LIMIT ?",
+            (object_id, limit),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
 def add_audit_event(event: dict) -> None:
     with connect() as conn:
         conn.execute(
