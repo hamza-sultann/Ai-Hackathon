@@ -4,6 +4,9 @@ An end-to-end machine learning pipeline that detects non-technical loss (theft, 
 
 Built specifically for grid architectures that rely on monthly manual billing and PMT/feeder totalizer readings, this system identifies anomalies without requiring a smart-meter rollout. 
 
+> [!NOTE]
+> **Full Stack Integration**: For a comprehensive architectural overview, branch topology, test verification results, and multi-agent enhancements, see [INTEGRATION_WALKTHROUGH.md](INTEGRATION_WALKTHROUGH.md).
+
 ## 🧠 How It Works
 This project uses a stacked two-model architecture:
 1. **Isolation Forest (Unsupervised):** Scans engineered features for "unknown unknowns" and abnormal consumption patterns, generating an out-of-fold anomaly score.
