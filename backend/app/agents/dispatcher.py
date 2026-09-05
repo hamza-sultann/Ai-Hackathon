@@ -15,6 +15,15 @@ from app.ml.scorer import RiskScore
 
 SOFT_WARNING_BAND = (0.65, 0.70)
 
+# Recidivist priority boost. Ported from the CLI's dispatch_agent(), which
+# nudges the effective probability up for repeat offenders before the
+# soft-warning/routing decision — previously computed but only surfaced as a
+# text annotation on the backend, never actually affecting the decision.
+RECIDIVIST_BOOST = 0.05
+
+SUMMER_MONTHS = {6, 7, 8}
+WINTER_MONTHS = {12, 1, 2}
+
 
 @dataclass
 class Safeguard:
@@ -37,6 +46,7 @@ class DispatchResult:
     cancelled: bool = False
     is_recidivist: bool = False
     is_duplicate: bool = False
+    effective_probability: float = 0.0
 
 
 def run_dispatch(
@@ -64,12 +74,19 @@ def run_dispatch(
         has_ami=score.is_ami,
     )
 
+    # Recidivism boost: ported from the CLI's dispatch_agent(), which elevates
+    # a repeat offender's *effective* probability before the routing decision
+    # (soft-warning band, field-alert wording) — the raw model probability
+    # (score.probability / RiskScore) is left untouched everywhere else.
+    effective_prob = min(prob + RECIDIVIST_BOOST, 1.0) if is_repeat else prob
+
     # Confound agent: registered solar or a near-dead feeder cancels the alert.
     if prosumer or (feeder_uptime_pct is not None and feeder_uptime_pct < 20.0):
         return DispatchResult(
             consumer_id=cid,
             routing_decision="Cancelled by Confound Agent",
             probability=prob,
+            effective_probability=effective_prob,
             safeguards=safeguards,
             cancelled=True,
             is_recidivist=is_repeat,
@@ -88,6 +105,7 @@ def run_dispatch(
             consumer_id=cid,
             routing_decision="Consolidated - Alert Active",
             probability=prob,
+            effective_probability=effective_prob,
             safeguards=safeguards,
             cancelled=True,
             is_recidivist=is_repeat,
@@ -96,7 +114,7 @@ def run_dispatch(
         )
 
     reasons = ", ".join(c.description for c in score.contributions[:2]) or "multivariate anomaly signature"
-    if SOFT_WARNING_BAND[0] <= prob <= SOFT_WARNING_BAND[1]:
+    if SOFT_WARNING_BAND[0] <= effective_prob <= SOFT_WARNING_BAND[1]:
         decision = "Sent Soft Warning SMS"
         field_alert = (
             f"ATTENTION {_mask(cid)}: potential metering anomaly detected "
@@ -106,14 +124,17 @@ def run_dispatch(
         decision = "Routed to Analyst + Field"
         field_alert = (
             f"PRIORITY CHECK: Consumer {_mask(cid)}, PMT {consumer.get('pmt_id', '?')}. "
-            f"Confidence {prob:.0%}. Reason: {reasons}."
+            f"Confidence {effective_prob:.0%}. Reason: {reasons}."
         )
         if prosumer:
             field_alert += " (Registered solar/net-metering on file.)"
 
     analyst_summary = _analyst_summary(score, consumer, top)
     if is_repeat:
-        analyst_summary += " [REPEAT OFFENDER: multiple anomaly flags on record]."
+        analyst_summary += (
+            f" [REPEAT OFFENDER: multiple anomaly flags on record — priority elevated "
+            f"to {effective_prob:.0%}]."
+        )
 
     pmt_text = _pmt_corroboration(pmt_loss_rank, pmt_residual_kwh)
     urdu_alert = urdu_localization_agent(field_alert) if (include_urdu and field_alert) else ""
@@ -122,6 +143,7 @@ def run_dispatch(
         consumer_id=cid,
         routing_decision=decision,
         probability=prob,
+        effective_probability=effective_prob,
         safeguards=safeguards,
         analyst_summary=analyst_summary,
         field_alert=field_alert,
@@ -130,6 +152,39 @@ def run_dispatch(
         is_recidivist=is_repeat,
         is_duplicate=is_dup,
     )
+
+
+def season_label(month: int) -> str:
+    if month in SUMMER_MONTHS:
+        return "Summer"
+    if month in WINTER_MONTHS:
+        return "Winter"
+    return "Shoulder"
+
+
+def seasonal_agent(base_threshold: float, *, month: int) -> float:
+    """Adjusts the base risk threshold based on season.
+
+    Ported from the CLI's `agents/agent_dispatcher.py::seasonal_agent()`,
+    which shifted the CLI loop's flagging threshold by wall-clock month
+    (`datetime.now().month`) — never called by the backend, so the live
+    system ran on a flat, un-adjusted threshold year-round.
+
+    Deliberate adaptation: this version takes an explicit `month` rather than
+    reading the real-world clock, so the caller passes the *analysis month*
+    being investigated (the simulated period), not the operator's local date
+    — the two are unrelated in this system (the dataset's "now" is whatever
+    month is under review, e.g. 2024-12, regardless of when the app runs).
+
+    Summer (Jun-Aug): theft (AC-driven load spikes) is more common — lower
+    the threshold to catch more cases. Winter (Dec-Feb): less common — raise
+    it to cut false alarms. Shoulder months: unchanged.
+    """
+    if month in SUMMER_MONTHS:
+        return base_threshold - 0.05
+    if month in WINTER_MONTHS:
+        return base_threshold + 0.05
+    return base_threshold
 
 
 import functools

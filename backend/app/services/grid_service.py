@@ -175,4 +175,7 @@ def system_overview() -> SystemOverview:
         analysis_status="Completed (Clean Safeguard Run)",
         monthly_coverage_percentage=100.0,
         smart_meter_coverage_percentage=round(100 * ami / n_consumers, 1) if n_consumers else 0.0,
+        season=ctx.season,
+        base_risk_threshold=ctx.base_threshold,
+        active_risk_threshold=ctx.threshold,
     )

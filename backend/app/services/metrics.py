@@ -5,6 +5,7 @@ import functools
 
 import pandas as pd
 
+from app.agents.dispatcher import seasonal_agent, season_label
 from app.config import get_settings
 from app.data.loader import get_data
 from app.ml.scorer import get_scorer
@@ -35,9 +36,19 @@ class AnalysisContext:
     def __init__(self) -> None:
         self.data = get_data()
         self.scorer = get_scorer()
-        self.threshold = get_settings().risk_threshold
         self.month = self.data.analysis_month
         self.month_str = self.data.month_str()
+
+        # Seasonal Agent: shifts the flagging threshold by the analysis
+        # month's season (see dispatcher.seasonal_agent for rationale).
+        settings = get_settings()
+        self.base_threshold = settings.risk_threshold
+        self.season = season_label(self.month.month)
+        self.threshold = (
+            seasonal_agent(self.base_threshold, month=self.month.month)
+            if settings.seasonal_agent_enabled
+            else self.base_threshold
+        )
 
         months = self.data.all_months
         idx = months.index(self.month) if self.month in months else len(months) - 1

@@ -1,13 +1,16 @@
 """Investigation queue, case detail, explainability, and reading history."""
 from __future__ import annotations
 
+import functools
 import math
 from datetime import datetime
 
 import numpy as np
 import pandas as pd
+import pyarrow.dataset as pa_ds
 
 from app.agents.dispatcher import DispatchResult, run_dispatch
+from app.config import get_settings
 from app.data.loader import get_data
 from app.db import get_finding, get_job_card
 from app.ml.scorer import RiskScore, get_scorer
@@ -166,6 +169,11 @@ def get_explanation(consumer_id: str) -> RiskExplanation | None:
         ],
         field_alert=dispatch.field_alert,
         field_alert_urdu=dispatch.field_alert_urdu,
+        routing_decision=dispatch.routing_decision,
+        cancelled=dispatch.cancelled,
+        is_recidivist=dispatch.is_recidivist,
+        is_duplicate=dispatch.is_duplicate,
+        effective_probability=round(dispatch.effective_probability, 4),
     )
 
 
@@ -208,8 +216,11 @@ def get_monthly_readings(consumer_id: str) -> list[MonthlyReading] | None:
 def get_hourly_readings(consumer_id: str) -> list[HourlyReading] | None:
     """Representative 24-hour profile for the analysis month.
 
-    The raw 1-hour AMI stream isn't shipped with the repo, so this reconstructs a
-    plausible diurnal curve from the consumer's monthly total and the Track-2
+    Real AMI consumers are served from the actual 1-hour interval stream
+    (`interval_readings.parquet`, produced by root `generate_intervals.py`)
+    when it's present locally. For consumers without a real smart meter (or
+    if the interval file hasn't been generated), this falls back to a
+    reconstructed diurnal curve from the monthly total and the Track-2
     aggregate features (peak flatline / night-drop), scaled to daily kWh.
     """
     ctx = context()
@@ -223,20 +234,24 @@ def get_hourly_readings(consumer_id: str) -> list[HourlyReading] | None:
     row = row.iloc[0]
 
     daily = float(row["billed_units_kwh"]) / 30.0
-    shape = _diurnal_shape()
-
-    peak_flatline = _num(row.get("peak_window_flatline_fraction")) or 0.0
-    night_drop = _num(row.get("nighttime_drop_index")) or 0.0
     is_flagged = consumer_id in ctx.flagged_consumer_ids
 
-    expected = shape * daily / shape.sum()
-    actual = expected.copy()
-    if is_flagged and (peak_flatline > 0.1 or night_drop > 0.4):
-        for h in range(24):
-            if h in PEAK_HOURS and peak_flatline > 0.1:
-                actual[h] *= max(0.05, 1 - peak_flatline)
-            if h in (23, 0, 1, 2, 3, 4) and night_drop > 0.4:
-                actual[h] *= max(0.1, 1 - night_drop)
+    real = _real_hourly_profile(consumer_id, ctx.month) if data.has_ami(consumer_id) else None
+    if real is not None:
+        actual, expected = real
+    else:
+        shape = _diurnal_shape()
+        peak_flatline = _num(row.get("peak_window_flatline_fraction")) or 0.0
+        night_drop = _num(row.get("nighttime_drop_index")) or 0.0
+
+        expected = shape * daily / shape.sum()
+        actual = expected.copy()
+        if is_flagged and (peak_flatline > 0.1 or night_drop > 0.4):
+            for h in range(24):
+                if h in PEAK_HOURS and peak_flatline > 0.1:
+                    actual[h] *= max(0.05, 1 - peak_flatline)
+                if h in (23, 0, 1, 2, 3, 4) and night_drop > 0.4:
+                    actual[h] *= max(0.1, 1 - night_drop)
 
     diverted = np.clip(expected - actual, 0, None)
     pmt_base_residual = 2.0
@@ -354,6 +369,66 @@ def _num(v) -> float | None:
     except (TypeError, ValueError):
         return None
     return None if math.isnan(f) else f
+
+
+@functools.lru_cache(maxsize=1)
+def _interval_dataset() -> pa_ds.Dataset | None:
+    """Real 1-hour AMI interval readings, lazily opened once per process.
+
+    Returns None when `interval_readings.parquet` hasn't been generated
+    locally (it's gitignored — run `python generate_intervals.py`).
+    """
+    path = get_settings().interval_readings_path
+    if not path.exists():
+        return None
+    return pa_ds.dataset(str(path), format="parquet")
+
+
+@functools.lru_cache(maxsize=512)
+def _interval_readings_for(consumer_id: str) -> pd.DataFrame | None:
+    """All real hourly rows for one consumer, or None if unavailable."""
+    dataset = _interval_dataset()
+    if dataset is None:
+        return None
+    table = dataset.to_table(filter=pa_ds.field("consumer_id") == consumer_id)
+    if table.num_rows == 0:
+        return None
+    df = table.to_pandas()
+    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df["hour"] = df["timestamp"].dt.hour
+    df["month"] = df["timestamp"].dt.to_period("M").dt.to_timestamp()
+    return df
+
+
+def _real_hourly_profile(consumer_id: str, month: pd.Timestamp) -> tuple[np.ndarray, np.ndarray] | None:
+    """(actual, expected) 24-length kWh-per-hour arrays from real interval data.
+
+    `actual` is this consumer's real average hourly profile for the analysis
+    month. `expected` is their real profile from their earliest 3 metered
+    months (always pre-theft-onset, per `generate_intervals.py`), rescaled to
+    the same daily total so the two curves are visually comparable. Returns
+    None if the interval file isn't generated or has no rows for this
+    consumer/month, so the caller can fall back to the synthesized curve.
+    """
+    df = _interval_readings_for(consumer_id)
+    if df is None:
+        return None
+
+    current = df[df["month"] == pd.Timestamp(month).normalize().replace(day=1)]
+    if current.empty:
+        return None
+    actual = current.groupby("hour")["interval_kwh"].mean().reindex(range(24), fill_value=0.0).to_numpy()
+
+    baseline_months = sorted(df["month"].unique())[:3]
+    baseline = df[df["month"].isin(baseline_months)]
+    baseline_shape = baseline.groupby("hour")["interval_kwh"].mean().reindex(range(24), fill_value=0.0).to_numpy()
+    shape_total = baseline_shape.sum()
+    if shape_total <= 0:
+        expected = actual.copy()
+    else:
+        expected = baseline_shape * (actual.sum() / shape_total)
+
+    return actual, expected
 
 
 _SHAPE_CACHE: np.ndarray | None = None

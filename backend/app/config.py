@@ -52,6 +52,10 @@ class Settings:
         # 0.50 is the operating point run_pipeline.py evaluates the calibrated
         # XGBoost model at. The scikit-learn fallback tolerates it too.
         self.risk_threshold: float = float(os.environ.get("ISTIKSHAF_RISK_THRESHOLD", "0.50"))
+        # Seasonal Agent (ported from the CLI's agents/agent_dispatcher.py):
+        # shifts risk_threshold by +/-0.05 for the analysis month's season.
+        # "off" pins the threshold to risk_threshold year-round.
+        self.seasonal_agent_enabled: bool = os.environ.get("ISTIKSHAF_SEASONAL_AGENT", "on").lower() != "off"
         self.force_retrain: bool = os.environ.get("ISTIKSHAF_FORCE_RETRAIN", "false").lower() == "true"
         self.analysis_month: str | None = os.environ.get("ISTIKSHAF_ANALYSIS_MONTH") or None
 
@@ -96,6 +100,18 @@ class Settings:
 
     def track2_artifacts_present(self) -> bool:
         return all(p.exists() for p in self.track2_artifacts.values())
+
+    @property
+    def interval_readings_path(self) -> Path:
+        """Real 1-hour AMI interval data (`consumer_id, timestamp, interval_kwh`),
+        produced by root `generate_intervals.py`. ~320MB / 51.8M rows, gitignored,
+        not shipped — generate it locally (`python generate_intervals.py`, ~9 min).
+        Falls back to a synthesized diurnal curve when absent."""
+        env = os.environ.get("ISTIKSHAF_INTERVAL_READINGS")
+        return _resolve(env) if env else self.artifacts_dir / "interval_readings.parquet"
+
+    def interval_readings_present(self) -> bool:
+        return self.interval_readings_path.exists()
 
     @property
     def model_path(self) -> Path:

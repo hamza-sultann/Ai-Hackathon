@@ -105,6 +105,11 @@ class RiskExplanation(CamelModel):
     safeguards: list[SafeguardCheck]
     field_alert: Optional[str] = None
     field_alert_urdu: Optional[str] = None
+    routing_decision: str = ""
+    cancelled: bool = False
+    is_recidivist: bool = False
+    is_duplicate: bool = False
+    effective_probability: float = 0.0
 
 
 class MonthlyReading(CamelModel):
@@ -308,6 +313,9 @@ class SystemOverview(CamelModel):
     analysis_status: str
     monthly_coverage_percentage: float
     smart_meter_coverage_percentage: float
+    season: str
+    base_risk_threshold: float
+    active_risk_threshold: float
 
 
 class FieldOverviewStats(CamelModel):
