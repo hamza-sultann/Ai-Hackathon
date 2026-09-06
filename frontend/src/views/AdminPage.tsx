@@ -97,7 +97,7 @@ export const AdminPage: React.FC = () => {
           value={modelServices.length}
           unit="Active Endpoints"
           accentColor="#B6F542"
-          subtext="PAI-EAS & Function Compute"
+          subtext="FastAPI & Scikit-Learn"
         />
 
         <MetricCard
@@ -105,7 +105,7 @@ export const AdminPage: React.FC = () => {
           value={dataSources.length}
           unit="Active Streams"
           accentColor="#40D9E8"
-          subtext="Kafka, Modbus, CDC & GIS"
+          subtext="Parquet, SQLite & GIS"
         />
 
         <MetricCard
@@ -113,7 +113,7 @@ export const AdminPage: React.FC = () => {
           value="140"
           unit="ms"
           accentColor="#63D98A"
-          subtext="XGBoost & TreeSHAP PAI latency"
+          subtext="HistGradientBoosting & TreeSHAP"
         />
 
         <MetricCard
@@ -136,21 +136,21 @@ export const AdminPage: React.FC = () => {
 
             <div className="space-y-2.5 text-xs">
               <div className="p-3 rounded-xl bg-[#0C110E] border border-[#263129] flex items-center justify-between">
-                <span className="text-[#9BA8A0]">PAI-EAS Cluster</span>
+                <span className="text-[#9BA8A0]">FastAPI Inference Server</span>
                 <span className="text-[#63D98A] font-bold font-mono-tech flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> 99.98% Uptime
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-[#0C110E] border border-[#263129] flex items-center justify-between">
-                <span className="text-[#9BA8A0]">Kafka Event Stream</span>
+                <span className="text-[#9BA8A0]">Telemetry Parquet Storage</span>
                 <span className="text-[#63D98A] font-bold font-mono-tech flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> 0ms Lag
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Synchronized
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-[#0C110E] border border-[#263129] flex items-center justify-between">
-                <span className="text-[#9BA8A0]">PostGIS Spatial Engine</span>
+                <span className="text-[#9BA8A0]">Feeder Network GIS</span>
                 <span className="text-[#63D98A] font-bold font-mono-tech flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Active
                 </span>

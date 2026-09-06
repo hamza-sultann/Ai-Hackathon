@@ -68,7 +68,7 @@ export const AdminDataSourcesPage: React.FC = () => {
             <Database className="w-5 h-5 text-[#40D9E8]" /> Data Telemetry Ingestion Streams
           </h1>
           <p className="text-xs text-[#9BA8A0] mt-1">
-            Real-time change data capture (CDC), Kafka high-throughput event buses, Modbus PMT loggers, and GIS sync connectors.
+            Parquet high-frequency telemetry stores, tabular billing ledgers, PMT energy balance loggers, and GIS network connectors.
           </p>
         </div>
         <div className="flex items-center gap-2 font-mono-tech text-xs text-[#9BA8A0] px-3.5 py-2 rounded-xl bg-[#0C110E] border border-[#263129]">
@@ -146,23 +146,23 @@ export const AdminDataSourcesPage: React.FC = () => {
         )}
       </div>
 
-      {/* CDC & Kafka Technical Architecture */}
+      {/* Telemetry Architecture & Synchronization */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-5 rounded-2xl bg-[#101512] border border-[#263129] space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-[#F3F7F4] font-heading">
-            <Zap className="w-4 h-4 text-[#B6F542]" /> Stream Buffer & Partitioning
+            <Zap className="w-4 h-4 text-[#B6F542]" /> High-Frequency Smart Meter Telemetry
           </div>
           <p className="text-xs text-[#9BA8A0] leading-relaxed">
-            Telemetry from 6,840 smart meters streams directly via Apache Kafka with 4 partitions mapped by feeder identifier. Modbus PMT balance aggregators buffer readings every 15 minutes.
+            Telemetry from 2,000 smart meters spanning 51.8M hourly interval readings partitioned by feeder and consumer ID. Hourly load profiles reconcile against PMT balance meters.
           </p>
         </div>
 
         <div className="p-5 rounded-2xl bg-[#101512] border border-[#263129] space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-[#F3F7F4] font-heading">
-            <Server className="w-4 h-4 text-[#40D9E8]" /> Batch CDC Synchronization Schedule
+            <Server className="w-4 h-4 text-[#40D9E8]" /> Tabular &amp; Network Ledger Synchronization
           </div>
           <p className="text-xs text-[#9BA8A0] leading-relaxed">
-            SAP IS-U database change logs sync on a daily schedule (18:00 PKT) with automated schema validation and outlier sanitization before model scoring.
+            Monthly billing ledgers and consumer master data sync with automated schema validation, missing reading imputation, and zero-consumption anomaly sanitization before scoring.
           </p>
         </div>
       </div>

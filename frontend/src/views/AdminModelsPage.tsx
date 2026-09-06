@@ -74,7 +74,7 @@ export const AdminModelsPage: React.FC = () => {
             <Cpu className="w-5 h-5 text-[#B6F542]" /> AI Model Microservice Endpoints
           </h1>
           <p className="text-xs text-[#9BA8A0] mt-1">
-            Alibaba Cloud PAI-EAS hosted models: Isolation Forest anomaly scoring, XGBoost risk classifier, and TreeSHAP attribution.
+            FastAPI inference endpoints: Isolation Forest anomaly scoring, HistGradientBoosting risk classifier, and TreeSHAP attribution.
           </p>
         </div>
         <button
@@ -155,7 +155,7 @@ export const AdminModelsPage: React.FC = () => {
                   <Play className="w-4 h-4 text-[#B6F542] fill-current" /> Live Model Inference Sandbox
                 </h3>
                 <p className="text-xs text-[#9BA8A0]">
-                  Execute real-time test vectors against Alibaba Cloud PAI-EAS microservice endpoints.
+                  Execute real-time test vectors against active machine learning microservice endpoints.
                 </p>
               </div>
               <button
@@ -251,7 +251,7 @@ export const AdminModelsPage: React.FC = () => {
               {inferenceResult && (
                 <div className="p-4 rounded-xl bg-[#0C110E] border border-[#B6F542]/40 space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono-tech">
-                    <span className="text-[#B6F542] font-bold">PAI-EAS Model Response</span>
+                    <span className="text-[#B6F542] font-bold">Model Inference Response</span>
                     <span className="text-[#9BA8A0]">Latency: {inferenceResult.latencyMs} ms</span>
                   </div>
                   <pre className="p-3 rounded-lg bg-[#070A09] border border-[#263129] text-[11px] font-mono-tech text-[#63D98A] overflow-x-auto">

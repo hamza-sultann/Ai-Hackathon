@@ -315,13 +315,13 @@ export const AnalystOverviewPage: React.FC = () => {
             <div className="group relative cursor-help flex items-center">
               <Info className="w-3.5 h-3.5 text-[#9BA8A0] group-hover:text-[#40D9E8] transition-colors" />
               <div className="pointer-events-none absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-2.5 bg-[#161D19] border border-[#263129] rounded-lg text-xs normal-case text-[#F3F7F4] shadow-xl z-50 whitespace-normal leading-relaxed">
-                Covers 68.4% of consumer connections (6,840 smart meters). 215 anomalies flagged via hourly load profiles & peak-tariff deviation models.
+                Covers {overview.smartMeterCoveragePercentage}% of consumer connections ({Math.round(overview.smartMeterCoveragePercentage / 100 * 10000).toLocaleString()} smart meters). Anomalies flagged via hourly load profiles & peak-tariff deviation models.
               </div>
             </div>
           </div>
 
           <div className="text-[24px] font-extrabold font-mono-tech leading-none text-[#40D9E8]">
-            68.4%
+            {overview.smartMeterCoveragePercentage}%
           </div>
 
           <div className="text-xs text-[#9BA8A0]">

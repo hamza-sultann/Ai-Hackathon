@@ -162,7 +162,7 @@ export const AnalysisDrawer: React.FC<AnalysisDrawerProps> = ({
                   <CheckCircle2 className="w-4 h-4 text-[#63D98A]" /> Data Quality Safeguards Pre-Check
                 </span>
                 <p>
-                  10,000 monthly billing accounts ready. 6,840 smart-meter telemetries active. Feeder outage log synced.
+                  10,000 monthly billing accounts ready. 2,000 smart-meter telemetries active. Feeder outage log synced.
                 </p>
               </div>
             </div>

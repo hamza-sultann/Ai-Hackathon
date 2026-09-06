@@ -31,7 +31,7 @@ export const WorkspaceSelectionPage: React.FC = () => {
       key: 'admin',
       icon: <Shield className="w-6 h-6" />,
       title: 'Admin & System Ops',
-      desc: 'Monitor data telemetry ingestion, model service health (PAI-EAS / Isolation Forest / TreeSHAP), prototype access controls, and audit trails.',
+      desc: 'Monitor data telemetry ingestion, model service health (FastAPI / Isolation Forest / TreeSHAP), system access controls, and audit trails.',
       color: '#F5B942',
       holoClass: 'holo-card holo-card-amber',
       cta: 'Launch Admin View',

@@ -51,7 +51,7 @@ export const PipelineComparisonPage: React.FC = () => {
         <Info className="w-5 h-5 text-[#F5B942] shrink-0 mt-0.5" />
         <div>
           <span className="font-bold text-[#F3F7F4] block mb-0.5">Smart-Meter Coverage Telemetry</span>
-          Smart-meter data is active on 68.4% of connections (6,840 / 10,000). For meters without AMI telemetry:
+          Smart-meter data is active on {((comparison.coverageStats.smartMeterCovered / comparison.coverageStats.totalConnections) * 100).toFixed(1)}% of connections ({comparison.coverageStats.smartMeterCovered.toLocaleString()} / {comparison.coverageStats.totalConnections.toLocaleString()}). For meters without AMI telemetry:
           <span className="text-[#F5B942] font-semibold ml-1">
             "Smart-meter data is unavailable for this connection. Monthly analysis remains active."
           </span>
