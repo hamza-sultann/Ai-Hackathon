@@ -9,6 +9,25 @@ def img_to_b64(path):
             return f"data:image/{mime};base64,{base64.b64encode(f.read()).decode('utf-8')}"
     return ""
 
+def ensure_deck_bg():
+    src = 'charts/bg_transmission_lines.jpg'
+    dst = 'charts/bg_transmission_lines_deck.jpg'
+    if os.path.exists(src) and not os.path.exists(dst):
+        from PIL import Image
+        import numpy as np
+        img = Image.open(src).convert('RGBA')
+        w, h = img.size
+        bg_base = Image.new('RGBA', (w, h), (17, 21, 10, 255))
+        mask = np.zeros((h, w), dtype=np.float32)
+        for y in range(h):
+            factor = 0.35 + 0.35 * (y / h)
+            mask[y, :] = factor
+        mask_img = Image.fromarray((mask * 255).astype(np.uint8))
+        composite = Image.composite(img, bg_base, mask_img).convert('RGB')
+        composite.save(dst, quality=95)
+
+ensure_deck_bg()
+
 img_disco = img_to_b64('charts/disco_losses.png')
 img_diurnal = img_to_b64('charts/diurnal_theft_signatures.png')
 img_ami = img_to_b64('charts/ami_uplift_benchmarks.png')
@@ -16,6 +35,7 @@ img_roi = img_to_b64('charts/roi_recovery.png')
 img_pole = img_to_b64('charts/cyber_pole.jpg')
 img_meter = img_to_b64('charts/smart_meter.jpg')
 img_substation = img_to_b64('charts/feeder_substation.jpg')
+img_bg = img_to_b64('charts/bg_transmission_lines_deck.jpg')
 
 html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -122,6 +142,13 @@ html_content = f"""<!DOCTYPE html>
     flex: 1;
     position: relative;
     overflow: hidden;
+    background-color: var(--bg);
+    background-image: 
+      radial-gradient(ellipse at 50% 25%, rgba(17, 21, 10, 0.45) 0%, rgba(17, 21, 10, 0.82) 90%),
+      url('{img_bg}');
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
   }}
   .slide {{
     position: absolute;
@@ -175,7 +202,9 @@ html_content = f"""<!DOCTYPE html>
 
   /* Cards */
   .card {{
-    background: var(--card);
+    background: rgba(24, 29, 17, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 22px;
@@ -183,6 +212,7 @@ html_content = f"""<!DOCTYPE html>
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }}
   .card-header {{
     font-family: 'Archivo Narrow', sans-serif;
@@ -225,13 +255,16 @@ html_content = f"""<!DOCTYPE html>
 
   /* KPI Box */
   .kpi-box {{
-    background: var(--card);
+    background: rgba(24, 29, 17, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 22px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }}
   .kpi-val {{
     font-family: 'Archivo Narrow', sans-serif;
@@ -262,11 +295,14 @@ html_content = f"""<!DOCTYPE html>
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--card);
+    background: rgba(24, 29, 17, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 10px;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }}
   .media-container img {{
     max-width: 100%;
@@ -395,7 +431,7 @@ html_content = f"""<!DOCTYPE html>
         <div class="kpi-sub" style="font-size: 12px;">Targeted accuracy jumps to 69.7%</div>
       </div>
     </div>
-    <div style="margin-top: 26px; padding: 18px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="margin-top: 26px; padding: 18px 24px; background: rgba(24, 29, 17, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; gap: 12px;">
       <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: var(--lime); letter-spacing: 0.12em; text-transform: uppercase;">
         CORE ENGINEERING &amp; RESEARCH TEAM
       </div>

@@ -196,12 +196,36 @@ prs.slide_width = Inches(13.333)
 prs.slide_height = Inches(7.5)
 blank_layout = prs.slide_layouts[6]
 
+def ensure_deck_bg():
+    src = 'charts/bg_transmission_lines.jpg'
+    dst = 'charts/bg_transmission_lines_deck.jpg'
+    if os.path.exists(src) and not os.path.exists(dst):
+        from PIL import Image
+        import numpy as np
+        img = Image.open(src).convert('RGBA')
+        w, h = img.size
+        bg_base = Image.new('RGBA', (w, h), (17, 21, 10, 255))
+        mask = np.zeros((h, w), dtype=np.float32)
+        for y in range(h):
+            factor = 0.35 + 0.35 * (y / h)
+            mask[y, :] = factor
+        mask_img = Image.fromarray((mask * 255).astype(np.uint8))
+        composite = Image.composite(img, bg_base, mask_img).convert('RGB')
+        composite.save(dst, quality=95)
+
+ensure_deck_bg()
+
 def apply_background(slide):
-    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    bg.fill.solid()
-    bg.fill.fore_color.rgb = C_BG
-    bg.line.fill.background()
-    return bg
+    bg_img = 'charts/bg_transmission_lines_deck.jpg'
+    if os.path.exists(bg_img):
+        pic = slide.shapes.add_picture(bg_img, 0, 0, prs.slide_width, prs.slide_height)
+        return pic
+    else:
+        bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
+        bg.fill.solid()
+        bg.fill.fore_color.rgb = C_BG
+        bg.line.fill.background()
+        return bg
 
 def add_header(slide, tag_text, title_text, subtitle_text=""):
     tag_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(6.0), Inches(0.35))
