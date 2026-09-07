@@ -370,30 +370,41 @@ html_content = f"""<!DOCTYPE html>
 <main>
   <!-- SLIDE 1 -->
   <section class="slide active" data-title="Executive Vision">
-    <div class="slide-tag">Executive Presentation &amp; Sovereign Strategy</div>
-    <div class="slide-title" style="font-size: 48px; color: var(--lime); margin-top: 10px;">ISTIKSHAF [ استکشاف ]</div>
-    <div class="slide-subtitle" style="font-size: 18px; color: var(--text); margin-bottom: 32px;">
-      Autonomous Agentic Revenue Protection &amp; Explainable Grid AI for Pakistan's Power Sector
+    <div class="slide-tag" style="font-size: 13px; letter-spacing: 0.15em;">Executive Presentation &amp; Sovereign Strategy</div>
+    <div class="slide-title" style="font-size: 56px; color: var(--lime); margin-top: 10px; line-height: 1.1;">ISTIKSHAF [ استکشاف ]</div>
+    <div class="slide-subtitle" style="font-size: 24px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+      Autonomous Agentic Revenue Protection &amp; Explainable Grid AI
     </div>
-    <div class="content-grid grid-3">
-      <div class="kpi-box">
-        <div class="kpi-val coral">PKR 2.65T</div>
-        <div class="kpi-label">Circular Debt</div>
-        <div class="kpi-sub">Paralyzing Pakistan's macroeconomic stability &amp; CPPA liquidity</div>
+    <div style="font-size: 15px; color: var(--text); margin-bottom: 28px;">
+      Physics-Grounded Enterprise Intelligence Engine Defeating Non-Technical Losses across Pakistan's Power Grid
+    </div>
+    <div class="content-grid grid-3" style="max-height: 200px;">
+      <div class="kpi-box" style="padding: 24px;">
+        <div class="kpi-val coral" style="font-size: 50px;">PKR 2.65T</div>
+        <div class="kpi-label" style="font-size: 14px;">Circular Debt Crisis</div>
+        <div class="kpi-sub" style="font-size: 12px;">Paralyzing sovereign CPPA liquidity</div>
       </div>
-      <div class="kpi-box">
-        <div class="kpi-val orange">PKR 520B+</div>
-        <div class="kpi-label">Annual Theft &amp; NTL</div>
-        <div class="kpi-sub">Stolen via kundas, meter bypasses, and billing fraud</div>
+      <div class="kpi-box" style="padding: 24px;">
+        <div class="kpi-val orange" style="font-size: 50px;">PKR 520B+</div>
+        <div class="kpi-label" style="font-size: 14px;">Annual Power Stolen</div>
+        <div class="kpi-sub" style="font-size: 12px;">Via kundas, meter bypasses &amp; fraud</div>
       </div>
-      <div class="kpi-box">
-        <div class="kpi-val">19.3x</div>
-        <div class="kpi-label">Field Raid Precision</div>
-        <div class="kpi-sub">Targeted precision surges from 3.6% baseline to 69.7%</div>
+      <div class="kpi-box" style="padding: 24px;">
+        <div class="kpi-val" style="font-size: 50px;">19.3x</div>
+        <div class="kpi-label" style="font-size: 14px;">Raid Precision Multiplier</div>
+        <div class="kpi-sub" style="font-size: 12px;">Targeted accuracy jumps to 69.7%</div>
       </div>
     </div>
-    <div style="margin-top: 32px; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted);">
-      <strong style="color: var(--lime);">SYSTEM ARCHITECTURE:</strong> Dual-Track Grid Ingest (Legacy Monthly + 51.8M High-Frequency AMI Engine) &bull; Physics-Informed ML &bull; 8-Agent Autonomous Swarm
+    <div style="margin-top: 26px; padding: 18px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: var(--lime); letter-spacing: 0.12em; text-transform: uppercase;">
+        CORE ENGINEERING &amp; RESEARCH TEAM
+      </div>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <div style="background: rgba(182, 245, 66, 0.12); border: 1px solid rgba(182, 245, 66, 0.4); border-radius: 8px; padding: 10px 22px; font-weight: 700; font-size: 16px; color: #ffffff; letter-spacing: 0.02em;">Hadiah Batool</div>
+        <div style="background: rgba(69, 220, 235, 0.12); border: 1px solid rgba(69, 220, 235, 0.4); border-radius: 8px; padding: 10px 22px; font-weight: 700; font-size: 16px; color: #ffffff; letter-spacing: 0.02em;">Hashim Khushal Khan</div>
+        <div style="background: rgba(182, 245, 66, 0.12); border: 1px solid rgba(182, 245, 66, 0.4); border-radius: 8px; padding: 10px 22px; font-weight: 700; font-size: 16px; color: #ffffff; letter-spacing: 0.02em;">Hamza Sultan</div>
+        <div style="background: rgba(69, 220, 235, 0.12); border: 1px solid rgba(69, 220, 235, 0.4); border-radius: 8px; padding: 10px 22px; font-weight: 700; font-size: 16px; color: #ffffff; letter-spacing: 0.02em;">Huda Ali</div>
+      </div>
     </div>
   </section>
 
@@ -814,6 +825,7 @@ karein aur bypass switch zabt karein.
           <li><strong>&lt; 45 Days Payback Period:</strong> Software deployment costs recovered within the first 6 weeks of active operational raids.</li>
           <li><strong>National Macro Impact:</strong> Scaling across all 10 DISCOs recovers an estimated PKR 140+ Billion annually, directly cutting Circular Debt by 5% yearly.</li>
           <li><strong>Deployment-Ready:</strong> Audited, physics-grounded, and ready for 90-day pilot deployment on high-loss 11kV feeders.</li>
+          <li><strong style="color: var(--cyan);">The Engineering Team:</strong> Hadiah Batool, Hashim Khushal Khan, Hamza Sultan, Huda Ali.</li>
         </ul>
       </div>
       <div class="media-container">

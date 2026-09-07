@@ -306,42 +306,87 @@ def set_speaker_notes(slide, script, qa=""):
 s1 = prs.slides.add_slide(blank_layout)
 apply_background(s1)
 
-banner = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.0), Inches(11.733), Inches(0.04))
+banner = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.85), Inches(11.733), Inches(0.05))
 banner.fill.solid()
 banner.fill.fore_color.rgb = C_LIME
 banner.line.fill.background()
 
-tb1 = s1.shapes.add_textbox(Inches(0.8), Inches(1.3), Inches(11.733), Inches(2.2))
+tb1 = s1.shapes.add_textbox(Inches(0.8), Inches(1.05), Inches(11.733), Inches(2.3))
 tf1 = tb1.text_frame
 tf1.word_wrap = True
+tf1.margin_left = tf1.margin_top = tf1.margin_right = tf1.margin_bottom = 0
 p = tf1.paragraphs[0]
 p.text = "ISTIKSHAF  [ استکشاف ]"
 p.font.name = FONT_HEADING
-p.font.size = Pt(44)
+p.font.size = Pt(50)
 p.font.bold = True
 p.font.color.rgb = C_LIME
 
 p2 = tf1.add_paragraph()
 p2.text = "Autonomous Agentic Revenue Protection & Explainable Grid AI"
 p2.font.name = FONT_HEADING
-p2.font.size = Pt(22)
+p2.font.size = Pt(24)
 p2.font.bold = True
-p2.font.color.rgb = C_TEXT
+p2.font.color.rgb = C_WHITE
 p2.space_before = Pt(8)
 
 p3 = tf1.add_paragraph()
-p3.text = "A Physics-Grounded Enterprise Intelligence Engine Defeating Non-Technical Losses across Pakistan's Power Grid"
+p3.text = "Physics-Grounded Enterprise Intelligence Engine Defeating Non-Technical Losses across Pakistan's Power Grid"
 p3.font.name = FONT_BODY
-p3.font.size = Pt(13)
-p3.font.color.rgb = C_MUTED
+p3.font.size = Pt(14)
+p3.font.color.rgb = C_TEXT
 p3.space_before = Pt(6)
 
-add_kpi(s1, Inches(0.8), Inches(4.0), Inches(3.6), Inches(2.3), "PKR 2.65T", "National Circular Debt", "Suffocating Pakistan's fiscal stability and CPPA liquidity", C_CORAL)
-add_kpi(s1, Inches(4.8), Inches(4.0), Inches(3.6), Inches(2.3), "PKR 520B+", "Annual Revenue Lost", "Stolen via kundas, meter bypasses, and billing fraud", C_ORANGE)
-add_kpi(s1, Inches(8.8), Inches(4.0), Inches(3.733), Inches(2.3), "19.3x", "Field Raid Precision Multiplier", "From 3.6% random spot checks to 69.7% targeted precision", C_LIME)
+# 3 Primary Impact Metrics (Bigger, Bolder)
+add_kpi(s1, Inches(0.8), Inches(3.6), Inches(3.6), Inches(1.9), "PKR 2.65T", "Circular Debt Crisis", "Suffocating national CPPA liquidity", C_CORAL)
+add_kpi(s1, Inches(4.8), Inches(3.6), Inches(3.6), Inches(1.9), "PKR 520B+", "Annual Revenue Lost", "Stolen via kundas & meter bypasses", C_ORANGE)
+add_kpi(s1, Inches(8.8), Inches(3.6), Inches(3.733), Inches(1.9), "19.3x", "Raid Precision Gain", "From 3.6% to 69.7% targeted accuracy", C_LIME)
+
+# Prominent Team Section
+tb_team = s1.shapes.add_textbox(Inches(0.8), Inches(5.72), Inches(11.733), Inches(0.35))
+tf_team = tb_team.text_frame
+tf_team.margin_left = tf_team.margin_top = tf_team.margin_right = tf_team.margin_bottom = 0
+p_th = tf_team.paragraphs[0]
+p_th.text = "CORE ENGINEERING & RESEARCH TEAM"
+p_th.font.name = FONT_MONO
+p_th.font.size = Pt(11)
+p_th.font.bold = True
+p_th.font.color.rgb = C_LIME
+
+team = [
+    ("Hadiah Batool", "Core ML & Research"),
+    ("Hashim Khushal Khan", "Grid Physics & Modeling"),
+    ("Hamza Sultan", "System & Agent Architecture"),
+    ("Huda Ali", "Data & Streaming Pipeline")
+]
+
+def add_team_member(slide, left, top, width, height, name, role):
+    card = add_card(slide, left, top, width, height, bg_color=C_CARD_ALT, border_color=RGBColor(80, 100, 50))
+    tb = slide.shapes.add_textbox(left + Inches(0.16), top + Inches(0.14), width - Inches(0.32), height - Inches(0.28))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
+    p1 = tf.paragraphs[0]
+    p1.text = name
+    p1.font.name = FONT_HEADING
+    p1.font.size = Pt(14)
+    p1.font.bold = True
+    p1.font.color.rgb = C_WHITE
+    p2 = tf.add_paragraph()
+    p2.text = role.upper()
+    p2.font.name = FONT_MONO
+    p2.font.size = Pt(9.0)
+    p2.font.bold = True
+    p2.font.color.rgb = C_CYAN
+    p2.space_before = Pt(4)
+
+w_tm = Inches(2.783)
+gap = Inches(0.20)
+for idx, (m_name, m_role) in enumerate(team):
+    add_team_member(s1, Inches(0.8) + idx * (w_tm + gap), Inches(6.12), w_tm, Inches(0.95), m_name, m_role)
 
 set_speaker_notes(s1,
-    "Judges and energy sector leaders: Every year, over 520 Billion Rupees vanishes from Pakistan's power grid into thin air. It is called Non-Technical Loss—power theft, illegal hookups, and meter tampering. It is the primary engine behind Pakistan's crippling 2.65 Trillion Rupee circular debt. Today, we present Istikshaf: an autonomous, physics-grounded enterprise AI platform that transforms revenue protection from blind manual spot-checks into precision enforcement.",
+    "Judges and energy sector leaders: Every year, over 520 Billion Rupees vanishes from Pakistan's power grid into thin air. It is called Non-Technical Loss—power theft, illegal hookups, and meter tampering. It is the primary engine behind Pakistan's crippling 2.65 Trillion Rupee circular debt. Today, our team—Hadiah Batool, Hashim Khushal Khan, Hamza Sultan, and Huda Ali—presents Istikshaf: an autonomous, physics-grounded enterprise AI platform that transforms revenue protection from blind manual spot-checks into precision enforcement.",
     "Q: Why hasn't this been solved by smart meters?\nA: Because 65% of Pakistan's grid relies on legacy analog meters, and national AMI rollout will take 15 years. Istikshaf is engineered as a dual-track architecture: it solves grid theft on legacy analog meters today with 69.7% precision, while instantly unlocking a 5.5x detection surge when smart meters are connected."
 )
 
@@ -1045,6 +1090,7 @@ add_bullet(tf, "19.3x Raid Efficiency", "Hit rate surges from 3.6% to 69.7%, sla
 add_bullet(tf, "< 45 Days Payback Period", "Software deployment costs recovered within the first 6 weeks of active operational raids.", space=6)
 add_bullet(tf, "National Sovereign Impact", "Scaling across all 10 DISCOs recovers an estimated PKR 140+ Billion annually, directly cutting Circular Debt by 5% yearly.", space=6)
 add_bullet(tf, "Deployment-Ready Platform", "Audited, physics-grounded, and ready for 90-day pilot deployment on high-loss 11kV feeders.", space=6)
+add_bullet(tf, "The Engineering Team", "Hadiah Batool, Hashim Khushal Khan, Hamza Sultan, Huda Ali.", space=6, color=C_CYAN)
 
 # Right Column: Chart
 s16.shapes.add_picture('charts/roi_recovery.png', Inches(6.3), Inches(1.85), width=Inches(6.233))
